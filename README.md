@@ -67,7 +67,7 @@ To protect against inadvertent commit of secrets to the repository:
 The following web services are started for monitoring the underlying components:
 
 - Celery Flower: [http://localhost:5555](http://localhost:5555)
-- Mongo Express: [http://localhost:8081](http://localhost:8081)
+- Mongo Express: [http://localhost:8081](http://localhost:8083)
 - Redis Commander: [http://localhost:8082](http://localhost:8082)
 
 ## Contributing ##
