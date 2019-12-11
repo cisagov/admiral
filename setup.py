@@ -29,10 +29,10 @@ def package_vars(version_file):
 
 
 setup(
-    name="example",
+    name="admiral",
     # Versions should comply with PEP440
-    version=package_vars("src/example/_version.py")["__version__"],
-    description="Example python library",
+    version=package_vars("src/admiral/_version.py")["__version__"],
+    description="Admiral",
     long_description=readme(),
     long_description_content_type="text/markdown",
     # NCATS "homepage"
@@ -64,11 +64,28 @@ setup(
     keywords="skeleton",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    package_data={"example": ["data/*.txt"]},
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
     include_package_data=True,
-    install_requires=["docopt", "setuptools"],
-    extras_require={"test": ["pre-commit", "pytest", "pytest-cov", "coveralls"]},
-    # Conveniently allows one to run the CLI tool as `example`
-    entry_points={"console_scripts": ["example = example.example:main"]},
+    install_requires=[
+        "celery >= 4.3.0rc2",
+        "cryptography >= 2.4.2",
+        "defusedxml",
+        "dnspython",
+        "docopt",
+        "docker-compose",
+        "mongoengine == 0.16.3",
+        "python-dateutil >= 2.7.5",
+        "PyYAML >= 3.12",
+        "redis == 3.2.0",
+        "requests >= 2.21.0",
+        "schedule >= 0.4.2",
+        "setuptools",
+        "tqdm >= 4.30.0",
+        "xmljson >= 0.2.0",
+    ],
+    extras_require={
+        "test": ["pre-commit", "pytest", "pytest-cov", "coveralls", "mock", "mongomock"]
+    },
+    # Conveniently allows one to run the CLI tool as `admiral`
+    entry_points={"console_scripts": ["admiral=admiral.celery:main"]},
 )
