@@ -1,0 +1,32 @@
+FROM python:3.6-alpine
+
+MAINTAINER Mark Feldhousen <mark.feldhousen@trio.dhs.gov>
+
+ARG CISA_UID=421
+ARG INSTALL_IPYTHON="Yes Please"
+ARG CISA_SRC="/usr/src"
+ENV CISA_HOME="/home/cisa" \
+    ADMIRAL_CONFIG_FILE="/run/secrets/admiral.yml" \
+    ADMIRAL_CONFIG_SECTION="dev-mode" \
+    ADMIRAL_WORKER_NAME="dev"
+
+RUN addgroup -S -g ${CISA_UID} cisa && adduser -S -u ${CISA_UID} -G cisa cisa && mkdir -p ${CISA_HOME} && chown -R cisa:cisa ${CISA_HOME}
+RUN apk update && apk upgrade && apk add sudo nmap nmap-scripts
+RUN echo "cisa ALL=(root) NOPASSWD: /usr/bin/nmap" > /etc/sudoers.d/cisa_nmap && chmod 0440 /etc/sudoers.d/cisa_nmap
+RUN pip3 install --upgrade pip
+
+# compile python cryptography package and cleanup
+RUN apk add gcc musl-dev python3-dev libffi-dev openssl-dev && \
+    pip3 install cryptography && \
+    apk del gcc # musl-dev python3-dev libffi-dev openssl-dev
+
+RUN if [ -n "${INSTALL_IPYTHON}" ]; then pip install ipython; fi
+
+WORKDIR ${CISA_SRC}
+
+COPY src admiral
+RUN pip install -e admiral
+
+USER cisa
+WORKDIR ${CISA_HOME}
+ENTRYPOINT ["admiral"]

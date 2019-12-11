@@ -1,0 +1,41 @@
+---
+version: "3.7"
+
+secrets:
+  admiral_yml:
+    file: ./secrets/admiral.yml
+  mongo_yml:
+    file: ./secrets/mongo.yml
+
+x-admiral-template: &admiral-template
+  build:
+    context: .
+    dockerfile: Dockerfile-admiral
+  image: admiral
+  init: true
+  environment:
+    ADMIRAL_CONFIG_FILE: "/run/secrets/admiral.yml"
+    ADMIRAL_CONFIG_SECTION: dev-mode
+    ADMIRAL_WORKER_NAME: dev
+  secrets:
+    - source: admiral_yml
+      target: admiral.yml
+    - source: mongo_yml
+      target: config.yml
+  volumes:
+    - ./src/admiral:/usr/src/admiral/admiral
+    - ./tests:/home/cisa/tests
+    - ./examples:/home/cisa/examples
+
+services:
+  celery-shell:
+    <<: *admiral-template
+    command: --interactive  # drop into an ipython celery shell
+
+  bash:
+    <<: *admiral-template
+    entrypoint: /bin/sh
+
+  test:
+    <<: *admiral-template
+    entrypoint: pytest
