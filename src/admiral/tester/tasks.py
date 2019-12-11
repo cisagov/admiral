@@ -28,7 +28,7 @@ def slow_add(x, y):
 def bad_add(x, y):
     """Add two numbers, poorly."""
     r = slow_add(x, y)
-    if random.choice([True, False]):
+    if random.choice([True, False]):  # nosec not used for crypto
         logger.info("Failing on purpose")
         raise Exception("Adding is hard")
     else:

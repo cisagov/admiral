@@ -9,6 +9,7 @@ from admiral.util import connect_from_config
 
 def main():
     """Start of program."""
+    print(f"Context manager loaded: {context_managers}")
     connect_from_config()
     # with context_managers.switch_connection(Cert, "production"):
     import IPython

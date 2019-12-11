@@ -2,8 +2,8 @@
 
 import sys
 import ipaddress
-import subprocess
-from xml.etree.ElementTree import fromstring
+import subprocess  # nosec security considerations considered
+from defusedxml.ElementTree import fromstring
 
 from celery import shared_task
 from celery.utils.log import get_task_logger
@@ -56,8 +56,9 @@ def run_it(command):
         if sys.version_info >= (3, 7):
             # TODO: Cannot use capture_output until we are using python 3.7
             # (which currently breaks celery)
+            # Allowing shell execution via popen below.
             completed_process = subprocess.run(
-                command, capture_output=True, shell=True, check=True
+                command, capture_output=True, shell=True, check=True  # nosec
             )
         else:
             # python 3.6 version
@@ -65,7 +66,7 @@ def run_it(command):
                 command,
                 stderr=subprocess.PIPE,
                 stdout=subprocess.PIPE,
-                shell=True,
+                shell=True,  # nosec
                 check=True,
             )
     except subprocess.CalledProcessError as err:

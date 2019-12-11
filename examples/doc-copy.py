@@ -23,6 +23,7 @@ from models import Domain
 
 
 def copy_all(model, from_alias, to_alias):
+    """Copy all documents from one connection to another."""
     print(f"Querying all {model} from {from_alias}")
     with context_managers.switch_db(model, from_alias) as model:
         all = model.objects.all()
@@ -35,6 +36,7 @@ def copy_all(model, from_alias, to_alias):
 
 
 def print_connections():
+    """Display the available connection keys."""
     config = load_config()
     print("Connections in configuration: ")
     for i in list(config["connections"].keys()):
@@ -42,6 +44,7 @@ def print_connections():
 
 
 def main():
+    """Start executing at main entry point."""
     from docopt import docopt
 
     args = docopt(__doc__, version="v0.0.1")

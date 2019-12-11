@@ -1,3 +1,4 @@
+"""Database models."""
 from .cert import Cert
 from .domain import Domain, Agency
 

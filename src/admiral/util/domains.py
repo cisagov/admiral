@@ -8,6 +8,7 @@ def trim_domains(domains):  # TODO make this more robust
     domains -- a collection of domain strings
 
     Returns a set of trimmed domain names, converted to lowercase
+
     """
     trimmed = set()
     for domain in domains:

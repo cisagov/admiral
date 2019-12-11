@@ -22,6 +22,7 @@ def get_sans_set(xcert):
     xcert -- an x509 certificate object
 
     Returns a set of strings containing the subjects
+
     """
     try:
         san = xcert.extensions.get_extension_for_oid(
@@ -50,6 +51,7 @@ def get_earliest_sct(xcert):
     Returns (datetime, bool):
         datetime: the earliest calculated date.
         bool: True if an SCT was used, False otherwise
+
     """
     try:
         earliest = datetime.max
@@ -71,6 +73,7 @@ def is_poisioned(xcert):
 
     Returns bool:
         True if an certificate was poisioned (pre-cert), False otherwise.
+
     """
     try:
         xcert.extensions.get_extension_for_oid(x509.oid.ExtensionOID.PRECERT_POISON)
@@ -140,6 +143,7 @@ class Cert(Document):
         Returns (cert, precert):
             cert: a Cert model object
             precert: a boolean, True if this is a precertificate, False otherwise
+
         """
         xcert = x509.load_pem_x509_certificate(bytes(pem, "utf-8"), default_backend())
         dns_names = get_sans_set(xcert)

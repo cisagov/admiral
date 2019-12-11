@@ -55,6 +55,7 @@ def get_new_log_ids(domain, max_expired_date, verbose=False):
     max_expired_date -- a date to filter out expired certificates
 
     Yields a sequence of new, unique, log IDs.
+
     """
     if verbose:
         tqdm.write(f"requesting certificate list for: {domain}")
@@ -97,6 +98,7 @@ def group_update_domain(domain, max_expired_date, verbose=False):
     max_expired_date -- a date to filter out expired certificates
 
     Returns the number of certificates imported.
+
     """
     # create a list of signatures to be executed in parallel
     signatures = []

@@ -29,6 +29,7 @@ def summary_by_domain(domain, subdomains=True, expired=False):
     domain -- the domain to query
     subdomains -- include certificates of subdomains
     expired -- include expired certificates
+
     """
     # validate input
     m = DOMAIN_NAME_RE.match(domain)
