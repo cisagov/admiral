@@ -1,10 +1,10 @@
-# skeleton-python-library #
+# admiral #
 
-[![GitHub Build Status](https://github.com/cisagov/skeleton-python-library/workflows/build/badge.svg)](https://github.com/cisagov/skeleton-python-library/actions)
-[![Coverage Status](https://coveralls.io/repos/github/cisagov/skeleton-python-library/badge.svg?branch=develop)](https://coveralls.io/github/cisagov/skeleton-python-library?branch=develop)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/cisagov/skeleton-python-library.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/skeleton-python-library/alerts/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/cisagov/skeleton-python-library.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/skeleton-python-library/context:python)
-[![Known Vulnerabilities](https://snyk.io/test/github/cisagov/skeleton-python-library/develop/badge.svg)](https://snyk.io/test/github/cisagov/skeleton-python-library)
+[![GitHub Build Status](https://github.com/cisagov/admiral/workflows/build/badge.svg)](https://github.com/cisagov/admiral/actions)
+[![Coverage Status](https://coveralls.io/repos/github/cisagov/admiral/badge.svg?branch=develop)](https://coveralls.io/github/cisagov/admiral?branch=develop)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/cisagov/admiral.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/admiral/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/cisagov/admiral.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/admiral/context:python)
+[![Known Vulnerabilities](https://snyk.io/test/github/cisagov/admiral/develop/badge.svg)](https://snyk.io/test/github/cisagov/admiral)
 
 This is a generic skeleton project that can be used to quickly get a
 new [cisagov](https://github.com/cisagov) Python library GitHub
