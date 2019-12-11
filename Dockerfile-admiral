@@ -22,16 +22,16 @@ RUN echo "cisa ALL=(root) NOPASSWD: /usr/bin/nmap" > \
 RUN pip3 install --upgrade pip
 
 # compile python cryptography package and cleanup
-RUN apk add gcc musl-dev python3-dev libffi-dev openssl-dev && \
-    pip3 install cryptography && \
-    apk del gcc # musl-dev python3-dev libffi-dev openssl-dev
+RUN apk add gcc musl-dev python3-dev libffi-dev openssl-dev make && \
+    pip3 install cryptography
 
 RUN if [ -n "${INSTALL_IPYTHON}" ]; then pip install ipython; fi
 
 WORKDIR ${CISA_SRC}
 
-COPY src admiral
-RUN pip install -e admiral
+COPY src src
+COPY setup.py README.md ./
+RUN pip install -e .
 
 USER cisa
 WORKDIR ${CISA_HOME}
