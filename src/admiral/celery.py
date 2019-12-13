@@ -40,7 +40,7 @@ def load_config(filename):
     """Load a configuration from a file."""
     print("Reading configuration from %s" % filename)
     with open(filename, "r") as stream:
-        config = yaml.safe_load(stream, Loader=yaml.FullLoader)
+        config = yaml.safe_load(stream)
     return config
 
 
