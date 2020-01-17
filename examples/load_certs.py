@@ -10,6 +10,7 @@ Usage:
   load-certs --version
 
 Options:
+  -d --dry-run             Do not modify database
   -s --skipto=<domain>     Skip to domain and continue
   -v --verbose             Print more detailed output
 """
@@ -90,7 +91,7 @@ def get_new_log_ids(domain, max_expired_date, verbose=False):
             yield (log_id)
 
 
-def group_update_domain(domain, max_expired_date, verbose=False):
+def group_update_domain(domain, max_expired_date, verbose=False, dry_run=False):
     """Create parallel tasks to download all new certificates with date filter.
 
     Arguments:
@@ -126,14 +127,16 @@ def group_update_domain(domain, max_expired_date, verbose=False):
         if is_precert:
             # if this is a precert, we save to the precert collection
             with context_managers.switch_collection(Cert, "precerts"):
-                cert.save()
+                if not dry_run:
+                    cert.save()
         else:
             # this is not a precert, save to the cert collection
-            cert.save()
+            if not dry_run:
+                cert.save()
     return len(job.tasks)
 
 
-def load_certs(domains, skip_to=None, verbose=False):
+def load_certs(domains, skip_to=None, verbose=False, dry_run=False):
     """Load new certificates for the domain list."""
     total_new_count = 0
     with tqdm(domains, unit="domain") as pbar:
@@ -149,7 +152,9 @@ def load_certs(domains, skip_to=None, verbose=False):
             #     continue
             if verbose:
                 tqdm.write("-" * 80)
-            new_count = group_update_domain(domain, EARLIEST_EXPIRED_DATE, verbose)
+            new_count = group_update_domain(
+                domain, EARLIEST_EXPIRED_DATE, verbose, dry_run
+            )
             total_new_count += new_count
             if verbose or new_count > 0:
                 tqdm.write(
@@ -174,7 +179,9 @@ def main():
 
     domains = Domain.objects(domain__ne="nasa.gov").batch_size(1)
     print(f"{domains.count()} domains to process")
-    total_new_count += load_certs(domains, args["--skipto"], args["--verbose"])
+    total_new_count += load_certs(
+        domains, args["--skipto"], args["--verbose"], args["--dry-run"]
+    )
     print(
         f"{total_new_count} certificates were imported for "
         f"{len(domains)} domains. (so far)"
@@ -182,7 +189,9 @@ def main():
 
     domains = Domain.objects(domain="nasa.gov").batch_size(1)
     print("processing nasa (troublesome)")
-    total_new_count += load_certs(domains, args["--skipto"], args["--verbose"])
+    total_new_count += load_certs(
+        domains, args["--skipto"], args["--verbose"], args["--dry-run"]
+    )
 
     print(
         f"{total_new_count} certificates were imported for " f"{len(domains)} domains."
