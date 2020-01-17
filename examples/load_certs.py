@@ -65,7 +65,7 @@ def get_new_log_ids(domain, max_expired_date, verbose=False):
     cert_list = cert_list.get()
     duplicate_log_ids = set()
     for i in tqdm(cert_list, desc="Subjects", unit="entries", leave=False):
-        log_id = i["min_cert_id"]
+        log_id = i["id"]
         cert_expiration_date = parser.parse(i["not_after"])
         if verbose:
             tqdm.write(

@@ -34,7 +34,7 @@ class TestCerts:
         print(f"received {len(summary.get())} summary records")
 
         # get the first id from the summaries
-        id = summary.get()[0]["min_cert_id"]
+        id = summary.get()[0]["id"]
         print(f"requesting certificate for id: {id}")
         first_cert = cert_by_id.delay(id)
         pem = first_cert.get(timeout=60)
