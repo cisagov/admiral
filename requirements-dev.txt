@@ -1,2 +1,4 @@
--r requirements-test.txt
+--requirement requirements-test.txt
 ipython
+mypy
+semver

@@ -19,6 +19,8 @@ import os
 from celery import Celery
 import yaml
 
+from ._version import __version__
+
 CONFIG_FILE_ENV_KEY = "ADMIRAL_CONFIG_FILE"
 CONFIG_SECTION_ENV_KEY = "ADMIRAL_CONFIG_SECTION"
 WORKER_NAME_ENV_KEY = "ADMIRAL_WORKER_NAME"
@@ -120,7 +122,7 @@ def main():
     """Start of program when invoked as a stand-alone."""
     from docopt import docopt
 
-    args = docopt(__doc__, version="v0.0.1")
+    args = docopt(__doc__, version=__version__)
     # TODO set environment vars for config and config_section or
     # https://celery.readthedocs.io/en/latest/userguide/extending.html#adding-new-command-line-options
 

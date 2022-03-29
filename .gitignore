@@ -1,5 +1,11 @@
-*.egg-info
+# This file specifies intentionally untracked files that Git should ignore.
+# Files already tracked by Git are not affected.
+# See: https://git-scm.com/docs/gitignore
+
+## Python ##
 __pycache__
-.python-version
 .coverage
+.mypy_cache
 .pytest_cache
+.python-version
+*.egg-info
