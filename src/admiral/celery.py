@@ -14,9 +14,12 @@ Options:
   -i --interactive               Create app and enter IPython
 """
 
+# Standard Python Libraries
 import os
 
+# Third-Party Libraries
 from celery import Celery
+from docopt import docopt
 import yaml
 
 from ._version import __version__
@@ -120,8 +123,6 @@ def configure_app(config_file=None, config_sction=None):
 
 def main():
     """Start of program when invoked as a stand-alone."""
-    from docopt import docopt
-
     args = docopt(__doc__, version=__version__)
     # TODO set environment vars for config and config_section or
     # https://celery.readthedocs.io/en/latest/userguide/extending.html#adding-new-command-line-options

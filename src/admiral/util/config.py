@@ -1,7 +1,8 @@
 """Configuration utility functions."""
 
-import yaml
+# Third-Party Libraries
 from mongoengine import connect
+import yaml
 
 
 def load_config(filename="/run/secrets/config.yml"):

@@ -2,11 +2,14 @@
 
 """Tests for port scan tasks."""
 
+# Standard Python Libraries
 import pprint
 
+# Third-Party Libraries
 import pytest
 
-from admiral.port_scan.tasks import up_scan, port_scan
+# cisagov Libraries
+from admiral.port_scan.tasks import port_scan, up_scan
 
 PP = pprint.PrettyPrinter(indent=4)
 
@@ -14,6 +17,7 @@ PP = pprint.PrettyPrinter(indent=4)
 @pytest.fixture(scope="module")
 def celery():
     """Celery app test fixture."""
+    # cisagov Libraries
     from admiral.celery import celery
 
     return celery
@@ -22,6 +26,7 @@ def celery():
 @pytest.fixture(scope="module")
 def host_ip():
     """Test fixture to resolve and return host_ip as a string."""
+    # Third-Party Libraries
     import dns.resolver
 
     query = dns.resolver.query("scanme.nmap.org")

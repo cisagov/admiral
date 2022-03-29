@@ -2,13 +2,16 @@
 
 """Tests for Certificate tasks."""
 
+# Standard Python Libraries
 import pprint
 
-import pytest
+# Third-Party Libraries
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
+import pytest
 
-from admiral.certs.tasks import summary_by_domain, cert_by_id
+# cisagov Libraries
+from admiral.certs.tasks import cert_by_id, summary_by_domain
 
 PP = pprint.PrettyPrinter(indent=4)
 
@@ -16,6 +19,7 @@ PP = pprint.PrettyPrinter(indent=4)
 @pytest.fixture(scope="module")
 def celery():
     """Celery app test fixture."""
+    # cisagov Libraries
     from admiral.celery import celery
 
     return celery

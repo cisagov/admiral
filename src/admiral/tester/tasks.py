@@ -1,9 +1,12 @@
 """Test Celery tasks."""
 
+# Standard Python Libraries
+import random
+import time
+
+# Third-Party Libraries
 from celery import shared_task
 from celery.utils.log import get_task_logger
-import time
-import random
 
 logger = get_task_logger(__name__)
 
