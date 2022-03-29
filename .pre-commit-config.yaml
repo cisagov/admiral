@@ -109,6 +109,9 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies:
+          - types-python-dateutil
+          - types-PyYAML
+          - types-requests
           - types-setuptools
   - repo: https://github.com/asottile/pyupgrade
     rev: v2.31.0
