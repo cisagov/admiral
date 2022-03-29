@@ -93,7 +93,6 @@ setup(
         "defusedxml",
         "dnspython",
         "docopt",
-        "docker-compose",
         "mongoengine >= 0.16.3",
         "python-dateutil >= 2.7.5",
         "PyYAML >=4.2b1",
