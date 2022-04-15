@@ -35,14 +35,13 @@ RUN echo "cisa ALL=(root) NOPASSWD: /usr/bin/nmap" > /etc/sudoers.d/cisa_nmap \
 
 RUN python3 -m pip --no-cache-dir install --upgrade pip setuptools wheel
 
-RUN if [ -n "${INSTALL_IPYTHON}" ]; \
-  then python3 -m pip --no-cache-dir install ipython pytest; fi
-
 WORKDIR ${CISA_SRC}
 
 COPY src src
 COPY setup.py README.md ./
-RUN python3 -m pip --no-cache-dir install --editable .
+RUN if [ -n "${INSTALL_IPYTHON}" ]; \
+  then python3 -m pip --no-cache-dir install --editable .[test]; \
+  else python3 -m pip --no-cache-dir install --editable .; fi
 
 USER cisa
 WORKDIR ${CISA_HOME}
