@@ -24,7 +24,7 @@ def celery():
     return celery
 
 
-# This test currently require the Docker Compose configuration to be running
+# This test currently requires the Docker Compose configuration to be running
 # to function. This makes it difficult to perform standard Python testing.
 # class TestCerts:
 #     """Test certificate transparency tasks."""
