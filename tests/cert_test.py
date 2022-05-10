@@ -26,6 +26,7 @@ def celery():
 
 # This test currently requires the Docker Compose configuration to be running
 # to function. This makes it difficult to perform standard Python testing.
+# See https://github.com/cisagov/admiral/issues/9 for details.
 # class TestCerts:
 #     """Test certificate transparency tasks."""
 #

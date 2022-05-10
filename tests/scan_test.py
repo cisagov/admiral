@@ -35,6 +35,7 @@ def host_ip():
 
 # These tests currently require the Docker Compose configuration to be running
 # to function. This makes it difficult to perform standard Python testing.
+# See https://github.com/cisagov/admiral/issues/9 for details.
 # class TestPortScans:
 #     """Test port scan celery tasks."""
 #
