@@ -1,6 +1,10 @@
 """Mongo document models for Certificate documents."""
+# Standard Python Libraries
 from datetime import datetime
 
+# Third-Party Libraries
+from cryptography import x509
+from cryptography.hazmat.backends import default_backend
 from mongoengine import Document
 from mongoengine.fields import (
     BooleanField,
@@ -9,9 +13,8 @@ from mongoengine.fields import (
     ListField,
     StringField,
 )
-from cryptography import x509
-from cryptography.hazmat.backends import default_backend
 
+# cisagov Libraries
 from admiral.util import trim_domains
 
 

@@ -15,16 +15,20 @@ Options:
   -v --verbose             Print more detailed output
 """
 
+# Standard Python Libraries
 import pprint
 import time
 
-from admiral.celery import configure_app
-from admiral.certs.tasks import summary_by_domain, cert_by_id
+# Third-Party Libraries
 from celery import group
 import dateutil.parser as parser
+from docopt import docopt
 from mongoengine import context_managers
 from tqdm import tqdm
 
+# cisagov Libraries
+from admiral.celery import configure_app
+from admiral.certs.tasks import cert_by_id, summary_by_domain
 from admiral.model import Cert, Domain
 from admiral.util import connect_from_config
 
@@ -165,8 +169,6 @@ def load_certs(domains, skip_to=None, verbose=False, dry_run=False):
 
 def main():
     """Start of program."""
-    from docopt import docopt
-
     args = docopt(__doc__, version="v0.0.2")
 
     # create database connection

@@ -1,1 +1,2 @@
--e .[test]
+--editable .[test]
+--requirement requirements.txt

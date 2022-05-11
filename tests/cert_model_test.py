@@ -1,12 +1,15 @@
 #!/usr/bin/env pytest -vs
 """Tests for Cert documents."""
 
+# Standard Python Libraries
 from datetime import datetime
 
+# Third-Party Libraries
 import dateutil.tz as tz
-import pytest
 import mongoengine
+import pytest
 
+# cisagov Libraries
 from admiral.model import Cert
 
 # curl https://crt.sh/?d=1034418093
@@ -45,6 +48,7 @@ d4pMM9+oGq5+HKzkP0tS2n2xbh5VOiYJnA0Bd7qHmCXvVA2QoGBMi6opNcQrc4ND
 @pytest.fixture(scope="class", autouse=True)
 def connection():
     """Create connections for tests to use."""
+    # Third-Party Libraries
     from mongoengine import connect
 
     connect(host="mongomock://localhost", alias="default")

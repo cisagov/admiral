@@ -12,14 +12,17 @@ Usage:
  Options:
     -l --list-connections   List the available connections.
 """
+# Standard Python Libraries
 import sys
 
-from admiral.util import load_config, connect_from_config
-
+# Third-Party Libraries
+from docopt import docopt
+from models import Domain
 from mongoengine import context_managers
 from tqdm import tqdm
 
-from models import Domain
+# cisagov Libraries
+from admiral.util import connect_from_config, load_config
 
 
 def copy_all(model, from_alias, to_alias):
@@ -45,8 +48,6 @@ def print_connections():
 
 def main():
     """Start executing at main entry point."""
-    from docopt import docopt
-
     args = docopt(__doc__, version="v0.0.1")
 
     if args["--list-connections"]:

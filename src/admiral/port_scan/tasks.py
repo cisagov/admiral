@@ -1,12 +1,14 @@
 """Port scanning Celery tasks."""
 
-import sys
+# Standard Python Libraries
 import ipaddress
 import subprocess  # nosec security considerations considered
-from defusedxml.ElementTree import fromstring
+import sys
 
+# Third-Party Libraries
 from celery import shared_task
 from celery.utils.log import get_task_logger
+from defusedxml.ElementTree import fromstring
 from xmljson import badgerfish as bf
 
 logger = get_task_logger(__name__)

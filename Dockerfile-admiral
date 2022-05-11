@@ -1,6 +1,10 @@
-FROM python:3.8-alpine
+FROM python:3.10.4-alpine
 
-MAINTAINER Mark Feldhousen <mark.feldhousen@trio.dhs.gov>
+# For a list of pre-defined annotation keys and value types see:
+# https://github.com/opencontainers/image-spec/blob/master/annotations.md
+# Note: Additional labels are added by the build workflow.
+LABEL org.opencontainers.image.authors="mark.feldhousen@trio.dhs.gov"
+LABEL org.opencontainers.image.vendor="Cybersecurity and Infrastructure Security Agency"
 
 ARG CISA_UID=421
 ARG INSTALL_IPYTHON="Yes Please"
@@ -10,28 +14,35 @@ ENV CISA_HOME="/home/cisa" \
     ADMIRAL_CONFIG_SECTION="dev-mode" \
     ADMIRAL_WORKER_NAME="dev"
 
-RUN addgroup -S -g ${CISA_UID} cisa && \
-    adduser -S -u ${CISA_UID} -G cisa cisa && \
-    mkdir -p ${CISA_HOME} && \
-    chown -R cisa:cisa ${CISA_HOME}
-RUN apk update && apk upgrade && \
-    apk add sudo nmap nmap-scripts
-RUN echo "cisa ALL=(root) NOPASSWD: /usr/bin/nmap" > \
-    /etc/sudoers.d/cisa_nmap && \
-    chmod 0440 /etc/sudoers.d/cisa_nmap
-RUN pip3 install --upgrade pip
+RUN addgroup --system --gid ${CISA_UID} cisa \
+  && adduser --system --uid ${CISA_UID} --ingroup cisa cisa \
+  && mkdir --parents ${CISA_HOME} \
+  && chown --recursive cisa:cisa ${CISA_HOME}
 
-# compile python cryptography package and cleanup
-RUN apk add gcc musl-dev python3-dev libffi-dev openssl-dev make && \
-    pip3 install cryptography
+RUN apk --no-cache add \
+    gcc \
+    libffi-dev \
+    make  \
+    musl-dev \
+    nmap \
+    nmap-scripts \
+    openssl-dev \
+    python3-dev \
+    sudo
 
-RUN if [ -n "${INSTALL_IPYTHON}" ]; then pip install ipython pytest; fi
+RUN echo "cisa ALL=(root) NOPASSWD: /usr/bin/nmap" > /etc/sudoers.d/cisa_nmap \
+  && chmod 0440 /etc/sudoers.d/cisa_nmap
+
+RUN python3 -m pip --no-cache-dir install --upgrade pip setuptools wheel
+
+RUN if [ -n "${INSTALL_IPYTHON}" ]; \
+  then python3 -m pip --no-cache-dir install ipython pytest; fi
 
 WORKDIR ${CISA_SRC}
 
 COPY src src
 COPY setup.py README.md ./
-RUN pip install -e .
+RUN python3 -m pip --no-cache-dir install --editable .
 
 USER cisa
 WORKDIR ${CISA_HOME}
