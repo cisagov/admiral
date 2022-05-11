@@ -88,10 +88,7 @@ setup(
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
     include_package_data=True,
     install_requires=[
-        # Celery 5.0 introduces breaking changes to the CLI. See
-        # https://docs.celeryq.dev/en/stable/history/whatsnew-5.0.html?highlight=command%20line%20options#new-command-line-interface
-        # for more information.
-        "celery >= 4.3.0,<5.0.0",
+        "celery >= 5.0.0,<6",
         "cryptography >= 2.4.2",
         "defusedxml",
         "dnspython",
