@@ -44,6 +44,8 @@ services:
     image: rediscommander/redis-commander:latest
     # build: .
     restart: always
+    depends_on:
+      - redis
     environment:
       - REDIS_HOSTS=default:redis:6379:0:fruitcake
     ports:
