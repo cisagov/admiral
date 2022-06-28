@@ -2,82 +2,38 @@
 version: "3.7"
 
 secrets:
-  redis_conf:
-    file: ./secrets/redis.conf
   admiral_yml:
     file: ./secrets/admiral.yml
   mongo_root_passwd_txt:
     file: ./secrets/mongo-root-passwd.txt
+  redis_conf:
+    file: ./secrets/redis.conf
 
 x-admiral-template: &admiral-template
   build:
     context: .
     dockerfile: Dockerfile-admiral
-  image: admiral
-  init: true
+  deploy:
+    mode: replicated
+    replicas: 6
   environment:
     ADMIRAL_CONFIG_FILE: "/run/secrets/admiral.yml"
     ADMIRAL_CONFIG_SECTION: dev-mode
     ADMIRAL_WORKER_NAME: dev
+  image: admiral
+  init: true
   secrets:
     - source: admiral_yml
       target: admiral.yml
   volumes:  # map for development only, comment out otherwise
     - ./src/admiral:/usr/src/admiral/admiral
-  deploy:
-    mode: replicated
-    replicas: 6
 
 services:
-  redis:
-    image: "redis:alpine"
-    command:
-      - "redis-server"
-      - "/run/secrets/redis_conf"
-    ports:
-      - "6379:6379"
-    secrets:
-      - source: redis_conf
-
-  redis-commander:
-    hostname: redis-commander
-    image: rediscommander/redis-commander:latest
-    # build: .
-    restart: always
-    depends_on:
-      - redis
-    environment:
-      - REDIS_HOSTS=default:redis:6379:0:fruitcake
-    ports:
-      - "8082:8081"
-
-  mongo:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_DATABASE: certs
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongo_root_passwd_txt
-    secrets:
-      - source: mongo_root_passwd_txt
-    volumes:
-      - ./init/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 8083:8081
-    environment:
-      ME_CONFIG_MONGODB_SERVER: mongo
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-
   celery-flower:
-    image: crgwbr/docker-celery-flower
     environment:
       # TODO: get this into the secrets raft
       CELERY_BROKER_URL: "redis://:fruitcake@redis:6379/0"
+    image: crgwbr/docker-celery-flower
     ports:
       - "5555:5555"
 
@@ -86,6 +42,49 @@ services:
     environment:
       ADMIRAL_CONFIG_SECTION: cert-worker
       ADMIRAL_WORKER_NAME: cert
+
+  mongo:
+    environment:
+      MONGO_INITDB_DATABASE: certs
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongo_root_passwd_txt
+    image: mongo
+    restart: always
+    secrets:
+      - source: mongo_root_passwd_txt
+    volumes:
+      - ./init/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  mongo-express:
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    image: mongo-express
+    ports:
+      - 8083:8081
+    restart: always
+
+  redis:
+    command:
+      - "redis-server"
+      - "/run/secrets/redis_conf"
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    secrets:
+      - source: redis_conf
+
+  redis-commander:
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOSTS=default:redis:6379:0:fruitcake
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    ports:
+      - "8082:8081"
+    restart: always
 
   scanner-worker:
     <<: *admiral-template
