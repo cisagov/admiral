@@ -31,7 +31,6 @@ x-admiral-template: &admiral-template
 services:
   celery-flower:
     environment:
-      # TODO: get this into the secrets raft
       CELERY_BROKER_URL: "redis://:fruitcake@redis:6379/0"
     image: crgwbr/docker-celery-flower
     ports:
