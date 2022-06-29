@@ -48,7 +48,7 @@ services:
       MONGO_INITDB_DATABASE: certs
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongo_root_passwd_txt
-    image: mongo
+    image: mongo:4.2
     restart: always
     secrets:
       - source: mongo_root_passwd_txt
@@ -60,7 +60,7 @@ services:
       ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
-    image: mongo-express
+    image: mongo-express:0.54
     ports:
       - 8083:8081
     restart: always
@@ -69,7 +69,7 @@ services:
     command:
       - "redis-server"
       - "/run/secrets/redis_conf"
-    image: "redis:alpine"
+    image: "redis:7.0-alpine"
     ports:
       - "6379:6379"
     secrets:
@@ -81,7 +81,7 @@ services:
     environment:
       - REDIS_HOSTS=default:redis:6379:0:fruitcake
     hostname: redis-commander
-    image: rediscommander/redis-commander:latest
+    image: ghcr.io/joeferner/redis-commander:0.8
     ports:
       - "8082:8081"
     restart: always
