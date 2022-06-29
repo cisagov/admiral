@@ -81,7 +81,7 @@ services:
     environment:
       - REDIS_HOSTS=default:redis:6379:0:fruitcake
     hostname: redis-commander
-    image: rediscommander/redis-commander:latest
+    image: ghcr.io/joeferner/redis-commander:0.8
     ports:
       - "8082:8081"
     restart: always
