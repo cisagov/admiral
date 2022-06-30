@@ -62,7 +62,7 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
     image: mongo-express:0.54
     ports:
-      - 8083:8081
+      - "8083:8081"
     restart: always
 
   redis:
