@@ -79,7 +79,7 @@ services:
     depends_on:
       - redis
     environment:
-      - REDIS_HOSTS=default:redis:6379:0:fruitcake
+      REDIS_HOSTS: "default:redis:6379:0:fruitcake"
     hostname: redis-commander
     image: ghcr.io/joeferner/redis-commander:0.8
     ports:
