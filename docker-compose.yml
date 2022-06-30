@@ -69,7 +69,7 @@ services:
     command:
       - "redis-server"
       - "/run/secrets/redis_conf"
-    image: "redis:7.0-alpine"
+    image: redis:7.0-alpine
     ports:
       - "6379:6379"
     secrets:
