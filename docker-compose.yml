@@ -65,14 +65,14 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
     image: mongo-express:0.54
     ports:
-      - 8083:8081
+      - "8083:8081"
     restart: always
 
   redis:
     command:
       - "redis-server"
       - "/run/secrets/redis_conf"
-    image: "redis:7.0-alpine"
+    image: redis:7.0-alpine
     ports:
       - "6379:6379"
     secrets:
@@ -82,7 +82,7 @@ services:
     depends_on:
       - redis
     environment:
-      - REDIS_HOSTS=default:redis:6379:0:fruitcake
+      REDIS_HOSTS: "default:redis:6379:0:fruitcake"
     hostname: redis-commander
     image: ghcr.io/joeferner/redis-commander:0.8
     ports:
