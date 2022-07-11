@@ -19,7 +19,8 @@ DOMAIN_NAME_RE = re.compile(
 
 # Default timeout values for tasks that perform web requests. See
 # "Warning' at https://docs.celeryq.dev/en/stable/userguide/tasks.html
-CONNECT_TIMEOUT, READ_TIMEOUT = 5.0, 30.0
+CONNECT_TIMEOUT = 5.0
+READ_TIMEOUT = 30.0
 
 
 @shared_task(
