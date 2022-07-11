@@ -34,8 +34,8 @@ services:
       # TODO: https://github.com/cisagov/admiral/issues/19
       # move into the secrets raft
       CELERY_BROKER_URL: "redis://:fruitcake@redis:6379/0"
-      # TODO: https://github.com/cisagov/admiral/issues/18
-      # replace this outdated image
+    # TODO: https://github.com/cisagov/admiral/issues/18
+    # replace this outdated image
     image: crgwbr/docker-celery-flower
     ports:
       - "5555:5555"
