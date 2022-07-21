@@ -128,12 +128,11 @@ def main():
     # https://celery.readthedocs.io/en/latest/userguide/extending.html#adding-new-command-line-options
 
     if args["--interactive"]:
-        celery.start(argv=["celery", "-A", "admiral", "shell"])
+        celery.start(argv=["-A", "admiral", "shell"])
     else:
         worker_name = os.environ.get(WORKER_NAME_ENV_KEY, "unnamed")
         celery.start(
             argv=[
-                "celery",
                 "-A",
                 "admiral",
                 "worker",
