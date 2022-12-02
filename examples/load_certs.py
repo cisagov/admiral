@@ -52,28 +52,30 @@ def cert_id_exists_in_database(log_id):
     return False
 
 
-def get_new_log_ids(domain, max_expired_date, verbose=False):
-    """Generate a sequence of new CT Log IDs.
+def get_new_log_issuances(domain, max_expired_date, verbose=False):
+    """Generate a sequence of new CT Log issuances.
 
     Arguments:
     domain -- the domain name to query
     max_expired_date -- a date to filter out expired certificates
 
-    Yields a sequence of new, unique, log IDs.
+    Yields a sequence of new, unique, log issuances.
 
     """
     if verbose:
         tqdm.write(f"requesting certificate list for: {domain}")
+        
     cert_list = summary_by_domain.delay(domain, subdomains=True)
     cert_list = cert_list.get()
     duplicate_log_ids = set()
     for i in tqdm(cert_list, desc="Subjects", unit="entries", leave=False):
         log_id = i["id"]
+        name = i["dns_names"][0] # take the first dns name available
         cert_expiration_date = parser.parse(i["not_after"])
         if verbose:
             tqdm.write(
                 f"id: {log_id}:\tex: {cert_expiration_date}\t"
-                f'{i["name_value"]}...\t',
+                f'{name}...\t',
                 end="",
             )
         if cert_expiration_date < max_expired_date:
@@ -91,7 +93,7 @@ def get_new_log_ids(domain, max_expired_date, verbose=False):
             duplicate_log_ids.add(log_id)
             if verbose:
                 tqdm.write("will import")
-            yield (log_id)
+            yield (i)
 
 
 def group_update_domain(domain, max_expired_date, verbose=False, dry_run=False):
@@ -106,8 +108,9 @@ def group_update_domain(domain, max_expired_date, verbose=False, dry_run=False):
     """
     # create a list of signatures to be executed in parallel
     signatures = []
-    for log_id in get_new_log_ids(domain.domain, max_expired_date, verbose):
-        signatures.append(cert_by_id.s(log_id))
+    
+    for issuance in get_new_log_issuances(domain.domain, max_expired_date, verbose):
+        signatures.append(cert_by_id.s(issuance))
 
     # create a job with all the signatures
     job = group(signatures)
