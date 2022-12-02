@@ -16,7 +16,9 @@ Options:
 """
 
 # Standard Python Libraries
+import base64
 import pprint
+import ssl
 import time
 
 # Third-Party Libraries
@@ -38,7 +40,8 @@ from admiral.util import connect_from_config
 PP = pprint.PrettyPrinter(indent=4)
 EARLIEST_EXPIRED_DATE = default_tzinfo(
     # make timezone aware
-    parser.parse("2018-10-01"), UTC
+    parser.parse("2018-10-01"),
+    UTC,
 )
 
 
@@ -69,18 +72,17 @@ def get_new_log_issuances(domain, max_expired_date, verbose=False):
     """
     if verbose:
         tqdm.write(f"requesting certificate list for: {domain}")
-        
+
     cert_list = summary_by_domain.delay(domain, subdomains=True)
     cert_list = cert_list.get()
     duplicate_log_ids = set()
     for i in tqdm(cert_list, desc="Subjects", unit="entries", leave=False):
         log_id = i["id"]
-        name = i["dns_names"][0] # take the first dns name available
+        name = i["dns_names"][0]  # take the first dns name available
         cert_expiration_date = parser.parse(i["not_after"])
         if verbose:
             tqdm.write(
-                f"id: {log_id}:\tex: {cert_expiration_date}\t"
-                f'{name}...\t',
+                f"id: {log_id}:\tex: {cert_expiration_date}\t" f"{name}...\t",
                 end="",
             )
         if cert_expiration_date < max_expired_date:
@@ -113,7 +115,7 @@ def group_update_domain(domain, max_expired_date, verbose=False, dry_run=False):
     """
     # create a list of signatures to be executed in parallel
     signatures = []
-    
+
     for issuance in get_new_log_issuances(domain.domain, max_expired_date, verbose):
         signatures.append(cert_by_id.s(issuance))
 
@@ -132,7 +134,9 @@ def group_update_domain(domain, max_expired_date, verbose=False, dry_run=False):
     tasks_to_results = zip(job.tasks, results.join())
 
     # create x509 certificates from the results
-    for task, pem in tasks_to_results:
+    for task, result in tasks_to_results:
+        data = base64.b64decode(result["data"])  # encoded in ASN.1 DER
+        pem = ssl.DER_cert_to_PEM_cert(data)
         cert, is_precert = Cert.from_pem(pem)
         cert.log_id = task.get("args")[0]  # get log_id from task
         if is_precert:
