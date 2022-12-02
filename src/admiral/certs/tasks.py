@@ -28,7 +28,7 @@ READ_TIMEOUT = 30.0
     retry_backoff=True,
     retry_jitter=True,
     retry_kwargs={"max_retries": 16},
-    rate_limit='10/h'
+    rate_limit="10/h",
 )
 def summary_by_domain(domain, subdomains=True):
     """Fetch a summary of the certificates in the log.
@@ -43,48 +43,38 @@ def summary_by_domain(domain, subdomains=True):
     if m is None:
         raise ValueError(f"invalid domain name format: {domain}")
 
-    wildcard_param = "%." if subdomains else ""
-    expired_param = "" if expired else "&exclude=expired"
+    # fetch api key
+    key = ""
+    with open("/run/secrets/sslmate-api-key.txt", "r") as file:
+        key = file.read().rstrip()
 
-    logger.info(f"Fetching certs from CT log for: {wildcard_param}{domain}")
+    logger.info(f"Fetching certs from CT log for: {domain}")
     url = (
-        f"https://crt.sh/?Identity={wildcard_param}{domain}{expired_param}"
-        f"&output=json"
+        f"https://api.certspotter.com/v1/issuances?domain={domain}&include_subdomains={subdomains}"
+        f"&expand=dns_names&expand=cert"
     )
     req = requests.get(
         url,
-        headers={"User-Agent": "cyhy/2.0.0"},
+        headers={"Authorization": f"Bearer {key}", "User-Agent": "cyhy/2.0.0"},
         timeout=(CONNECT_TIMEOUT, READ_TIMEOUT),
     )
 
     if req.ok:
         data = json.loads(req.content)
-        if subdomains:
-            # a query for the unwildcarded domain needs to be made separately
-            data += summary_by_domain(domain, subdomains=False, expired=expired)
         return data
     else:
         req.raise_for_status()
 
 
-@shared_task(
-    autoretry_for=(Exception, requests.HTTPError, requests.exceptions.HTTPError),
-    retry_backoff=True,
-    retry_jitter=True,
-    retry_kwargs={"max_retries": 16},
-)
-def cert_by_id(id):
-    """Fetch a certificate by log ID."""
+@shared_task
+def cert_by_id(issuance):
+    """Fetch a certificate by log ID.
+
+    Arguments:
+    issuance -- the certificate record found in one or more logs
+
+    """
+    id = issuance["id"]
     logger.info(f"Fetching cert data from CT log for id: {id}.")
 
-    url = f"https://crt.sh/?d={id}"
-    req = requests.get(
-        url,
-        headers={"User-Agent": "cyhy/2.0.0"},
-        timeout=(CONNECT_TIMEOUT, READ_TIMEOUT),
-    )
-
-    if req.ok:
-        return req.content.decode()
-    else:
-        req.raise_for_status()
+    return issuance["cert"]
