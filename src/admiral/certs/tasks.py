@@ -28,6 +28,7 @@ READ_TIMEOUT = 30.0
     retry_backoff=True,
     retry_jitter=True,
     retry_kwargs={"max_retries": 16},
+    rate_limit='10/h'
 )
 def summary_by_domain(domain, subdomains=True, expired=False):
     """Fetch a summary of the certificates in the log.
