@@ -30,13 +30,12 @@ READ_TIMEOUT = 30.0
     retry_kwargs={"max_retries": 16},
     rate_limit='10/h'
 )
-def summary_by_domain(domain, subdomains=True, expired=False):
+def summary_by_domain(domain, subdomains=True):
     """Fetch a summary of the certificates in the log.
 
     Arguments:
     domain -- the domain to query
     subdomains -- include certificates of subdomains
-    expired -- include expired certificates
 
     """
     # validate input

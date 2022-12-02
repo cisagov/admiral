@@ -64,8 +64,7 @@ def get_new_log_ids(domain, max_expired_date, verbose=False):
     """
     if verbose:
         tqdm.write(f"requesting certificate list for: {domain}")
-    expired = domain != "nasa.gov"  # NASA is breaking the CT Log
-    cert_list = summary_by_domain.delay(domain, subdomains=True, expired=expired)
+    cert_list = summary_by_domain.delay(domain, subdomains=True)
     cert_list = cert_list.get()
     duplicate_log_ids = set()
     for i in tqdm(cert_list, desc="Subjects", unit="entries", leave=False):
