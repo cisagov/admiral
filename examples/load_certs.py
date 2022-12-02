@@ -22,6 +22,8 @@ import time
 # Third-Party Libraries
 from celery import group
 import dateutil.parser as parser
+from dateutil.tz import UTC
+from dateutil.utils import default_tzinfo
 from docopt import docopt
 from mongoengine import context_managers
 from tqdm import tqdm
@@ -34,7 +36,10 @@ from admiral.util import connect_from_config
 
 # Globals
 PP = pprint.PrettyPrinter(indent=4)
-EARLIEST_EXPIRED_DATE = parser.parse("2018-10-01")
+EARLIEST_EXPIRED_DATE = default_tzinfo(
+    # make timezone aware
+    parser.parse("2018-10-01"), UTC
+)
 
 
 def cert_id_exists_in_database(log_id):
