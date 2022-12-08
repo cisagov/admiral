@@ -9,6 +9,9 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 import requests
 
+# We use the version number to identify our user-agent string
+from .._version import __version__
+
 logger = get_task_logger(__name__)
 
 # regexr.com/3e8n2
@@ -55,7 +58,10 @@ def summary_by_domain(domain, subdomains=True):
     )
     req = requests.get(
         url,
-        headers={"Authorization": f"Bearer {key}", "User-Agent": "cyhy/2.0.0"},
+        headers={
+            "Authorization": f"Bearer {key}",
+            "User-Agent": f"admiral/{__version__}",
+        },
         timeout=(CONNECT_TIMEOUT, READ_TIMEOUT),
     )
 
