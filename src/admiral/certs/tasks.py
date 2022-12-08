@@ -45,7 +45,7 @@ def summary_by_domain(domain, subdomains=True):
 
     # read SSLMate API key
     key = ""
-    with open("/run/secrets/sslmate-api-key.txt", "r") as file:
+    with open("/run/secrets/sslmate-api-key.txt") as file:
         key = file.read().rstrip()
 
     logger.info(f"Fetching certs from CT log for: {domain}")
