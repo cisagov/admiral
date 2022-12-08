@@ -39,7 +39,10 @@ from admiral.util import connect_from_config
 # Globals
 PP = pprint.PrettyPrinter(indent=4)
 EARLIEST_EXPIRED_DATE = default_tzinfo(
-    # make timezone aware
+    # Make the earliest expired date timezone aware. This date in 
+    # particular represents the start of FY19, the fiscal year during
+    # which Emergency Directive 19-01 went into effect. For more, see
+    # https://www.cisa.gov/emergency-directive-19-01.
     parser.parse("2018-10-01"),
     UTC,
 )
