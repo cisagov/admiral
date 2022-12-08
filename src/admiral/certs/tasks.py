@@ -25,10 +25,10 @@ READ_TIMEOUT = 30.0
 
 @shared_task(
     autoretry_for=(Exception, requests.HTTPError, requests.exceptions.HTTPError),
+    rate_limit="10/h",
     retry_backoff=True,
     retry_jitter=True,
     retry_kwargs={"max_retries": 16},
-    rate_limit="10/h",
 )
 def summary_by_domain(domain, subdomains=True):
     """Fetch a summary of the certificates in the log.
