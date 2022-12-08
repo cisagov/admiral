@@ -10,7 +10,7 @@ import pprint
 # from cryptography.hazmat.backends import default_backend
 import pytest
 
-# from admiral.certs.tasks import cert_by_id, summary_by_domain
+# from admiral.certs.tasks import cert_by_issuance, summary_by_domain
 
 PP = pprint.PrettyPrinter(indent=4)
 
@@ -42,7 +42,7 @@ def celery():
 #         # get the first id from the summaries
 #         id = summary.get()[0]["id"]
 #         print(f"requesting certificate for id: {id}")
-#         first_cert = cert_by_id.delay(id)
+#         first_cert = cert_by_issuance.delay(id)
 #         pem = first_cert.get(timeout=60)
 #         print("done")
 #

@@ -67,11 +67,11 @@ def summary_by_domain(domain, subdomains=True):
 
 
 @shared_task
-def cert_by_id(issuance):
-    """Fetch a certificate by log ID.
+def cert_by_issuance(issuance):
+    """Fetch a certificate object from the issuance object.
 
     Arguments:
-    issuance -- the certificate record found in one or more logs
+    issuance -- the certificate issuance record found in one or more logs
 
     """
     id = issuance["id"]

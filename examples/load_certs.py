@@ -32,7 +32,7 @@ from tqdm import tqdm
 
 # cisagov Libraries
 from admiral.celery import configure_app
-from admiral.certs.tasks import cert_by_id, summary_by_domain
+from admiral.certs.tasks import cert_by_issuance, summary_by_domain
 from admiral.model import Cert, Domain
 from admiral.util import connect_from_config
 
@@ -117,7 +117,7 @@ def group_update_domain(domain, max_expired_date, verbose=False, dry_run=False):
     signatures = []
 
     for issuance in get_new_log_issuances(domain.domain, max_expired_date, verbose):
-        signatures.append(cert_by_id.s(issuance))
+        signatures.append(cert_by_issuance.s(issuance))
 
     # create a job with all the signatures
     job = group(signatures)
