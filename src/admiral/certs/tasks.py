@@ -43,7 +43,7 @@ def summary_by_domain(domain, subdomains=True):
     if m is None:
         raise ValueError(f"invalid domain name format: {domain}")
 
-    # fetch api key
+    # read SSLMate API key
     key = ""
     with open("/run/secrets/sslmate-api-key.txt", "r") as file:
         key = file.read().rstrip()
