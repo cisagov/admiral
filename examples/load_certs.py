@@ -81,7 +81,9 @@ def get_new_log_issuances(domain, max_expired_date, verbose=False):
     duplicate_log_ids = set()
     for i in tqdm(cert_list, desc="Subjects", unit="entries", leave=False):
         log_id = i["id"]
-        name = i["dns_names"][0]  # take the first DNS name available
+        # Write the first valid DNS name to verbose output. Otherwise,
+        # the names are discarded.
+        name = i["dns_names"][0]
         cert_expiration_date = parser.parse(i["not_after"])
         if verbose:
             tqdm.write(
