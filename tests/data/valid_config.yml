@@ -1,0 +1,6 @@
+---
+connections:
+  local:
+    uri: mongomock://local-user:example@mongo:27017/local
+  production:
+    uri: mongomock://production-user:example@mongo:27017/production

@@ -38,13 +38,13 @@ class CustomCelery(Celery):
         """Make generated tasks names nicer."""
         if module.endswith(".tasks"):
             module = module[:-6]
-        return super(CustomCelery, self).gen_task_name(name, module)
+        return super().gen_task_name(name, module)
 
 
 def load_config(filename):
     """Load a configuration from a file."""
     print("Reading configuration from %s" % filename)
-    with open(filename, "r") as stream:
+    with open(filename) as stream:
         config = yaml.safe_load(stream)
     return config
 
