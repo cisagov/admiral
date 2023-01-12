@@ -8,6 +8,8 @@ secrets:
     file: ./secrets/mongo-root-passwd.txt
   redis_conf:
     file: ./secrets/redis.conf
+  sslmate_api_key_txt:
+    file: ./secrets/sslmate-api-key.txt
 
 x-admiral-template: &admiral-template
   build:
@@ -25,6 +27,8 @@ x-admiral-template: &admiral-template
   secrets:
     - source: admiral_yml
       target: admiral.yml
+    - source: sslmate_api_key_txt
+      target: sslmate-api-key.txt
   volumes:  # map for development only, comment out otherwise
     - ./src/admiral:/usr/src/admiral/admiral
 

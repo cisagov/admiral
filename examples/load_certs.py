@@ -16,25 +16,36 @@ Options:
 """
 
 # Standard Python Libraries
+import base64
 import pprint
+import ssl
 import time
 
 # Third-Party Libraries
 from celery import group
 import dateutil.parser as parser
+from dateutil.tz import UTC
+from dateutil.utils import default_tzinfo
 from docopt import docopt
 from mongoengine import context_managers
 from tqdm import tqdm
 
 # cisagov Libraries
 from admiral.celery import configure_app
-from admiral.certs.tasks import cert_by_id, summary_by_domain
+from admiral.certs.tasks import cert_by_issuance, summary_by_domain
 from admiral.model import Cert, Domain
 from admiral.util import connect_from_config
 
 # Globals
 PP = pprint.PrettyPrinter(indent=4)
-EARLIEST_EXPIRED_DATE = parser.parse("2018-10-01")
+EARLIEST_EXPIRED_DATE = default_tzinfo(
+    # Make the earliest expired date timezone aware. This date in
+    # particular represents the start of FY19, the fiscal year during
+    # which Emergency Directive 19-01 went into effect. For more, see
+    # https://www.cisa.gov/emergency-directive-19-01.
+    parser.parse("2018-10-01"),
+    UTC,
+)
 
 
 def cert_id_exists_in_database(log_id):
@@ -52,29 +63,31 @@ def cert_id_exists_in_database(log_id):
     return False
 
 
-def get_new_log_ids(domain, max_expired_date, verbose=False):
-    """Generate a sequence of new CT Log IDs.
+def get_new_log_issuances(domain, max_expired_date, verbose=False):
+    """Generate a sequence of new CT Log issuances.
 
     Arguments:
     domain -- the domain name to query
     max_expired_date -- a date to filter out expired certificates
 
-    Yields a sequence of new, unique, log IDs.
+    Yields a sequence of new, unique, log issuances.
 
     """
     if verbose:
         tqdm.write(f"requesting certificate list for: {domain}")
-    expired = domain != "nasa.gov"  # NASA is breaking the CT Log
-    cert_list = summary_by_domain.delay(domain, subdomains=True, expired=expired)
+
+    cert_list = summary_by_domain.delay(domain, subdomains=True)
     cert_list = cert_list.get()
     duplicate_log_ids = set()
     for i in tqdm(cert_list, desc="Subjects", unit="entries", leave=False):
         log_id = i["id"]
+        # Write the first valid DNS name to verbose output. Otherwise,
+        # the names are discarded.
+        name = i["dns_names"][0]
         cert_expiration_date = parser.parse(i["not_after"])
         if verbose:
             tqdm.write(
-                f"id: {log_id}:\tex: {cert_expiration_date}\t"
-                f'{i["name_value"]}...\t',
+                f"id: {log_id}:\tex: {cert_expiration_date}\t" f"{name}...\t",
                 end="",
             )
         if cert_expiration_date < max_expired_date:
@@ -92,7 +105,7 @@ def get_new_log_ids(domain, max_expired_date, verbose=False):
             duplicate_log_ids.add(log_id)
             if verbose:
                 tqdm.write("will import")
-            yield (log_id)
+            yield (i)
 
 
 def group_update_domain(domain, max_expired_date, verbose=False, dry_run=False):
@@ -107,8 +120,9 @@ def group_update_domain(domain, max_expired_date, verbose=False, dry_run=False):
     """
     # create a list of signatures to be executed in parallel
     signatures = []
-    for log_id in get_new_log_ids(domain.domain, max_expired_date, verbose):
-        signatures.append(cert_by_id.s(log_id))
+
+    for issuance in get_new_log_issuances(domain.domain, max_expired_date, verbose):
+        signatures.append(cert_by_issuance.s(issuance))
 
     # create a job with all the signatures
     job = group(signatures)
@@ -125,7 +139,9 @@ def group_update_domain(domain, max_expired_date, verbose=False, dry_run=False):
     tasks_to_results = zip(job.tasks, results.join())
 
     # create x509 certificates from the results
-    for task, pem in tasks_to_results:
+    for task, result in tasks_to_results:
+        data = base64.b64decode(result["data"])  # encoded in ASN.1 DER
+        pem = ssl.DER_cert_to_PEM_cert(data)
         cert, is_precert = Cert.from_pem(pem)
         cert.log_id = task.get("args")[0]  # get log_id from task
         if is_precert:
