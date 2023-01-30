@@ -17,7 +17,7 @@ x-admiral-template: &admiral-template
     dockerfile: Dockerfile-admiral
   deploy:
     mode: replicated
-    replicas: 6
+    replicas: 5
   environment:
     ADMIRAL_CONFIG_FILE: "/run/secrets/admiral.yml"
     ADMIRAL_CONFIG_SECTION: dev-mode
