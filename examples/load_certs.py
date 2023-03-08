@@ -143,7 +143,7 @@ def group_update_domain(domain, max_expired_date, verbose=False, dry_run=False):
         data = base64.b64decode(result["data"])  # encoded in ASN.1 DER
         pem = ssl.DER_cert_to_PEM_cert(data)
         cert, is_precert = Cert.from_pem(pem)
-        cert.log_id = task.get("args")[0]  # get log_id from task
+        cert.log_id = task.get("args")[0]["id"]  # get log_id from task
         if is_precert:
             # if this is a precert, we save to the precert collection
             with context_managers.switch_collection(Cert, "precerts"):
