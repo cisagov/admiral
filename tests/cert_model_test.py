@@ -7,6 +7,8 @@ from datetime import datetime
 # Third-Party Libraries
 import dateutil.tz as tz
 import mongoengine
+from mongoengine import connect
+from mongomock import MongoClient
 import pytest
 
 # cisagov Libraries
@@ -48,11 +50,7 @@ d4pMM9+oGq5+HKzkP0tS2n2xbh5VOiYJnA0Bd7qHmCXvVA2QoGBMi6opNcQrc4ND
 @pytest.fixture(scope="class", autouse=True)
 def connection():
     """Create connections for tests to use."""
-    # Third-Party Libraries
-    from mongoengine import connect
-
-    # TODO: Update this connection method. See #50 for more details.
-    connect(host="mongomock://localhost", alias="default")
+    connect(host="mongodb://localhost", mongo_client_class=MongoClient, alias="default")
 
 
 class TestCerts:
