@@ -75,7 +75,6 @@ setup(
         # that you indicate whether you support Python 2, Python 3 or both.
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
@@ -83,7 +82,7 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     # What does your project relate to?
     keywords="celery certificate-transparency cisa-directives",
     packages=find_packages(where="src"),
@@ -96,9 +95,7 @@ setup(
         "defusedxml",
         "dnspython",
         "docopt",
-        # MongoEngine 0.27.0 introduces a breaking change to the mongomock
-        # connection method. See #50 for more details.
-        "mongoengine >= 0.16.3,<0.27.0",
+        "mongoengine >= 0.16.3",
         "python-dateutil >= 2.7.5",
         "PyYAML >=4.2b1",
         "redis >= 3.2.0",
