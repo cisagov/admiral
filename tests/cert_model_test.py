@@ -51,6 +51,7 @@ def connection():
     # Third-Party Libraries
     from mongoengine import connect
 
+    # TODO: Update this connection method. See #50 for more details.
     connect(host="mongomock://localhost", alias="default")
 
 
