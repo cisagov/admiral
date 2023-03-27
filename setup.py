@@ -98,7 +98,7 @@ setup(
         "docopt",
         # MongoEngine 0.27.0 introduces a breaking change to the mongomock
         # connection method. See #50 for more details.
-        "mongoengine >= 0.16.3,<0.27.0",
+        "mongoengine >= 0.16.3,< 0.28.0",
         "python-dateutil >= 2.7.5",
         "PyYAML >=4.2b1",
         "redis >= 3.2.0",
