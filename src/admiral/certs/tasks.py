@@ -53,7 +53,7 @@ def summary_by_domain(domain, subdomains=True):
     logger.info(f"Fetching certs from CT log for: {domain}")
     url = (
         f"https://api.certspotter.com/v1/issuances?domain={domain}&include_subdomains={subdomains}"
-        f"&expand=dns_names&expand=cert"
+        f"&expand=dns_names&expand=cert_der"
     )
     req = requests.get(
         url,
@@ -82,4 +82,4 @@ def cert_by_issuance(issuance):
     id = issuance["id"]
     logger.info(f"Fetching cert data from CT log for id: {id}.")
 
-    return issuance["cert"]
+    return issuance["cert_der"]
