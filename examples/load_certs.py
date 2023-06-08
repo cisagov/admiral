@@ -140,7 +140,7 @@ def group_update_domain(domain, max_expired_date, verbose=False, dry_run=False):
 
     # create x509 certificates from the results
     for task, result in tasks_to_results:
-        data = base64.b64decode(result["data"])  # encoded in ASN.1 DER
+        data = base64.b64decode(result)  # encoded in ASN.1 DER
         pem = ssl.DER_cert_to_PEM_cert(data)
         cert, is_precert = Cert.from_pem(pem)
         cert.log_id = task.get("args")[0]["id"]  # get log_id from task
