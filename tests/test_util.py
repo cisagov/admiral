@@ -1,8 +1,7 @@
 """Test the functionality of the util sub-module."""
 
 # Third-Party Libraries
-from mongoengine import connect
-from mongomock import MongoClient
+import mongomock
 import pytest
 
 # cisagov Libraries
@@ -34,8 +33,4 @@ def test_load_config_valid():
 
 def test_connect_from_config_valid(valid_config):
     """Test that a valid configuration connects to appropriate connections."""
-    connections = valid_config["connections"]
-    for alias in connections.keys():
-        connect(
-            host=connections[alias]["uri"], mongo_client_class=MongoClient, alias=alias
-        )
+    util.connect_from_config(valid_config, mongomock.MongoClient)
