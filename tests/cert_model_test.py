@@ -66,8 +66,8 @@ class TestCerts:
     def test_subjects(self):
         """Validate that subjects and trimmed_subjects are calulcated correctly."""
         cert = Cert()
-        cert.subjects = ["cisa.gov", "cyber.dhs.gov"]
-        assert set(cert.trimmed_subjects) == {"cisa.gov", "dhs.gov"}
+        cert.subjects = ["cisa.gov", "cyber.dhs.gov", "cisa.dhs.fed.us"]
+        assert set(cert.trimmed_subjects) == {"cisa.gov", "dhs.gov", "dhs.fed.us"}
 
     def test_simple_creation(self):
         """Create a new user, and save it."""
