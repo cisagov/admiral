@@ -97,7 +97,7 @@ setup(
         "docopt",
         "mongoengine >= 0.27.0",
         "python-dateutil >= 2.7.5",
-        "PyYAML >=4.2b1",
+        "PyYAML >= 6.0.0",
         "redis >= 3.2.0",
         "requests <2.21,>=2.6.1",
         "schedule >= 0.4.2",
