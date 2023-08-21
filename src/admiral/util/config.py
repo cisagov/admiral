@@ -2,6 +2,7 @@
 
 # Third-Party Libraries
 from mongoengine import connect
+import pymongo
 import yaml
 
 
@@ -13,10 +14,10 @@ def load_config(filename="/run/secrets/config.yml"):
     return config
 
 
-def connect_from_config(config=None):
+def connect_from_config(config=None, client=pymongo.MongoClient):
     """Create connections from a confguration."""
     if not config:
         config = load_config()
     connections = config["connections"]
     for alias in connections.keys():
-        connect(host=connections[alias]["uri"], alias=alias)
+        connect(host=connections[alias]["uri"], mongo_client_class=client, alias=alias)

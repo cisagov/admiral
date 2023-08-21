@@ -7,6 +7,8 @@ from datetime import datetime
 # Third-Party Libraries
 import dateutil.tz as tz
 import mongoengine
+from mongoengine import connect
+from mongomock import MongoClient
 import pytest
 
 # cisagov Libraries
@@ -48,11 +50,7 @@ d4pMM9+oGq5+HKzkP0tS2n2xbh5VOiYJnA0Bd7qHmCXvVA2QoGBMi6opNcQrc4ND
 @pytest.fixture(scope="class", autouse=True)
 def connection():
     """Create connections for tests to use."""
-    # Third-Party Libraries
-    from mongoengine import connect
-
-    # TODO: Update this connection method. See #50 for more details.
-    connect(host="mongomock://localhost", alias="default")
+    connect(host="mongodb://localhost", mongo_client_class=MongoClient, alias="default")
 
 
 class TestCerts:
@@ -68,8 +66,8 @@ class TestCerts:
     def test_subjects(self):
         """Validate that subjects and trimmed_subjects are calulcated correctly."""
         cert = Cert()
-        cert.subjects = ["cisa.gov", "cyber.dhs.gov"]
-        assert set(cert.trimmed_subjects) == {"cisa.gov", "dhs.gov"}
+        cert.subjects = ["cisa.gov", "cyber.dhs.gov", "cisa.dhs.fed.us"]
+        assert set(cert.trimmed_subjects) == {"cisa.gov", "dhs.gov", "dhs.fed.us"}
 
     def test_simple_creation(self):
         """Create a new user, and save it."""
