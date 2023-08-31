@@ -8,6 +8,7 @@ import re
 from celery import shared_task
 from celery.utils.log import get_task_logger
 import requests
+import yaml
 
 # We use the version number to identify our user-agent string
 from .._version import __version__
@@ -45,20 +46,18 @@ def summary_by_domain(domain, subdomains=True):
     if m is None:
         raise ValueError(f"invalid domain name format: {domain}")
 
-    # read SSLMate API key
-    key = ""
-    with open("/run/secrets/sslmate-api-key.txt") as file:
-        key = file.read().rstrip()
+    # grab censys credentials
+    with open("/run/secrets/censys.yml") as stream:
+        creds = yaml.safe_load(stream)
 
     logger.info(f"Fetching certs from CT log for: {domain}")
-    url = (
-        f"https://api.certspotter.com/v1/issuances?domain={domain}&include_subdomains={subdomains}"
-        f"&expand=dns_names&expand=cert_der"
-    )
+    url = "https://search.censys.io/v2/certificates/search"
+    query = f"names:{domain}" if subdomains else f"names={domain}"
     req = requests.get(
         url,
+        auth=(creds["id"], creds["secret"]),
+        params={"q": f"{query}"},
         headers={
-            "Authorization": f"Bearer {key}",
             "User-Agent": f"admiral/{__version__}",
         },
         timeout=(CONNECT_TIMEOUT, READ_TIMEOUT),
