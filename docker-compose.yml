@@ -4,12 +4,12 @@ version: "3.7"
 secrets:
   admiral_yml:
     file: ./secrets/admiral.yml
+  censys_yml:
+    file: ./secrets/censys.yml
   mongo_root_passwd_txt:
     file: ./secrets/mongo-root-passwd.txt
   redis_conf:
     file: ./secrets/redis.conf
-  sslmate_api_key_txt:
-    file: ./secrets/sslmate-api-key.txt
 
 x-admiral-template: &admiral-template
   build:
@@ -27,8 +27,8 @@ x-admiral-template: &admiral-template
   secrets:
     - source: admiral_yml
       target: admiral.yml
-    - source: sslmate_api_key_txt
-      target: sslmate-api-key.txt
+    - source: censys_yml
+      target: censys.yml
   volumes:  # map for development only, comment out otherwise
     - ./src/admiral:/usr/src/admiral/admiral
 
