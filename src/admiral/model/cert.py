@@ -1,4 +1,5 @@
 """Mongo document models for Certificate documents."""
+
 # Standard Python Libraries
 from datetime import datetime
 

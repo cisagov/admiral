@@ -1,4 +1,5 @@
 """Utility functions."""
+
 from .config import connect_from_config, load_config
 from .domains import trim_domains
 
