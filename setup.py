@@ -99,7 +99,7 @@ setup(
         "python-dateutil >= 2.7.5",
         "PyYAML >= 6.0.0",
         "redis >= 3.2.0",
-        "requests <2.26,>=2.6.1",
+        "requests >=2.6.1",
         "schedule >= 0.4.2",
         "setuptools",
         "tqdm >= 4.30.0",
