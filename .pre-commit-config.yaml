@@ -161,10 +161,15 @@ repos:
         # the dev section of setup.py to avoid discrepancies in type
         # checking between environments.
         additional_dependencies:
+          - celery-types
+          - types-defusedxml
+          - types-docopt
           - types-python-dateutil
           - types-PyYAML
+          - types-redis
           - types-requests
           - types-setuptools
+          - types-tqdm
   - repo: https://github.com/pypa/pip-audit
     rev: v2.7.3
     hooks:

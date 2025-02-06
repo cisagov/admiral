@@ -113,8 +113,15 @@ setup(
         # field of the mypy pre-commit hook to avoid discrepancies in type
         # checking between environments.
         "dev": [
+            "celery-types",
+            "types-defusedxml",
             "types-docopt",
+            "types-python-dateutil",
+            "types-PyYAML",
+            "types-redis",
+            "types-requests",
             "types-setuptools",
+            "types-tqdm",
         ],
         "test": [
             "coverage",
