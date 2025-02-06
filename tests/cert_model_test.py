@@ -1,4 +1,3 @@
-#!/usr/bin/env pytest -vs
 """Tests for Cert documents."""
 
 # Standard Python Libraries

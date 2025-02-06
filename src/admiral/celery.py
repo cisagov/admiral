@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """The Dreaded Rear Admiral.
 
 A configuarable Celery application.
