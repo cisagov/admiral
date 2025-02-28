@@ -1,5 +1,3 @@
-#!/usr/bin/env pytest -vs
-
 """Tests for port scan tasks."""
 
 # Standard Python Libraries

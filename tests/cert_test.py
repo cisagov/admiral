@@ -1,5 +1,3 @@
-#!/usr/bin/env pytest -vs
-
 """Tests for Certificate tasks."""
 
 # Standard Python Libraries
