@@ -1,5 +1,5 @@
 ---
-version: "3.7"
+name: admiral
 
 secrets:
   admiral_yml:
