@@ -4,8 +4,8 @@ name: admiral
 secrets:
   # TODO: Move config files from secrets to a new configs section
   # See https://github.com/cisagov/admiral/issues/80 for details
-  admiral_yml:
-    file: ./secrets/admiral.yml
+  admiral_yaml:
+    file: ./secrets/admiral.yaml
   mongo_root_passwd_txt:
     file: ./secrets/mongo-root-passwd.txt
   redis_conf:
@@ -21,14 +21,14 @@ x-admiral-template: &admiral-template
     mode: replicated
     replicas: 5
   environment:
-    ADMIRAL_CONFIG_FILE: "/run/secrets/admiral.yml"
+    ADMIRAL_CONFIG_FILE: "/run/secrets/admiral.yaml"
     ADMIRAL_CONFIG_SECTION: dev-mode
     ADMIRAL_WORKER_NAME: dev
   image: admiral
   init: true
   secrets:
-    - source: admiral_yml
-      target: admiral.yml
+    - source: admiral_yaml
+      target: admiral.yaml
     - source: sslmate_api_key_txt
       target: sslmate-api-key.txt
   volumes:  # map for development only, comment out otherwise
