@@ -2,8 +2,8 @@
 name: admiral
 
 secrets:
-  # TODO: https://github.com/cisagov/admiral/issues/80
-  # move out of secrets
+  # TODO: Move config files from secrets to a new configs section
+  # See https://github.com/cisagov/admiral/issues/80 for details
   admiral_yml:
     file: ./secrets/admiral.yml
   mongo_root_passwd_txt:
