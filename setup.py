@@ -96,7 +96,7 @@ setup(
         "dnspython",
         "docopt",
         "mongoengine >= 0.27.0",
-        "pymongo <= 4.10",
+        "pymongo <= 4.12.0",
         "python-dateutil >= 2.7.5",
         "PyYAML >= 6.0.0",
         "redis >= 3.2.0",
