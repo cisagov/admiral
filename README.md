@@ -1,7 +1,7 @@
 # admiral 👩‍✈️🚢⚓️ #
 
 [![GitHub Build Status](https://github.com/cisagov/admiral/workflows/build/badge.svg)](https://github.com/cisagov/admiral/actions)
-[![CodeQL](https://github.com/cisagov/admiral/workflows/CodeQL/badge.svg)](https://github.com/cisagov/admiral/actions/workflows/codeql-analysis.yml)
+[![CodeQL](https://github.com/cisagov/admiral/workflows/CodeQL/badge.svg)](https://github.com/cisagov/admiral/actions/workflows/codeql-analysis.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/cisagov/admiral/badge.svg?branch=develop)](https://coveralls.io/github/cisagov/admiral?branch=develop)
 [![Known Vulnerabilities](https://snyk.io/test/github/cisagov/admiral/develop/badge.svg)](https://snyk.io/test/github/cisagov/admiral)
 
@@ -16,7 +16,7 @@ This project requires a [Docker](https://www.docker.com) installation.
 - Build the docker image:
   - `docker compose build`
 - Change the credentials in the following configuration files:
-  - `secrets/admiral.yml`
+  - `secrets/admiral.yaml`
   - `secrets/redis.conf`
   - `compose.yaml`
 - Start the composition:
@@ -26,28 +26,28 @@ This project requires a [Docker](https://www.docker.com) installation.
 - Monitor the system:
   - [http://localhost:5555](http://localhost:5555)
 - Optional: Run the code tests
-  - `docker compose -f docker-compose-dev.yml run test`
+  - `docker compose -f compose-dev.yaml run test`
 
 ## Development and Debugging ##
 
-A separate `docker-compose-dev.yml` file is provided to support development and
+A separate `compose-dev.yaml` file is provided to support development and
 testing. Using this composition, a container can be started in a few different modes:
 
 To start up an IPython session with a configured Celery app:
 
-`docker compose -f docker-compose-dev.yml run celery-shell`
+`docker compose -f compose-dev.yaml run celery-shell`
 
 To start up a development container with a bash shell:
 
-`docker compose -f docker-compose-dev.yml run bash`
+`docker compose -f compose-dev.yaml run bash`
 
 To run all unit and system tests:
 
-`docker compose -f docker-compose-dev.yml run test`
+`docker compose -f compose-dev.yaml run test`
 
 Additional arguments can be passed to `pytest` when creating the container:
 
-`docker compose -f docker-compose-dev.yml run test -vs tests/scan_test.py`
+`docker compose -f compose-dev.yaml run test -vs tests/scan_test.py`
 
 To access a mongo shell:
 
