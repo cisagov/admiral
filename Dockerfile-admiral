@@ -10,7 +10,7 @@ ARG CISA_UID=421
 ARG INSTALL_IPYTHON="Yes Please"
 ARG CISA_SRC="/usr/src"
 ENV CISA_HOME="/home/cisa" \
-    ADMIRAL_CONFIG_FILE="/run/secrets/admiral.yml" \
+    ADMIRAL_CONFIG_FILE="/admiral_config" \
     ADMIRAL_CONFIG_SECTION="dev-mode" \
     ADMIRAL_WORKER_NAME="dev"
 
