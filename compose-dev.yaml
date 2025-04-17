@@ -1,27 +1,26 @@
 ---
 name: admiral
 
-secrets:
-  admiral_yaml:
-    file: ./secrets/admiral.yaml
-  mongo_yaml:
-    file: ./secrets/mongo.yaml
+configs:
+  admiral_config:
+    file: ./configs/admiral.yaml
+  mongo_config:
+    file: ./configs/mongo.yaml
 
 x-admiral-template: &admiral-template
   build:
     context: .
     dockerfile: Dockerfile-admiral
+  configs:
+    - source: admiral_config
+    - source: mongo_config
+      target: config.yaml
   image: admiral
   init: true
   environment:
-    ADMIRAL_CONFIG_FILE: "/run/secrets/admiral.yaml"
+    ADMIRAL_CONFIG_FILE: "/admiral_config"
     ADMIRAL_CONFIG_SECTION: dev-mode
     ADMIRAL_WORKER_NAME: dev
-  secrets:
-    - source: admiral_yaml
-      target: admiral.yaml
-    - source: mongo_yaml
-      target: config.yaml
   volumes:
     - ./src/admiral:/usr/src/admiral/admiral
     - ./tests:/home/cisa/tests
