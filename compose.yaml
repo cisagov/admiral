@@ -4,6 +4,8 @@ name: admiral
 configs:
   admiral_config:
     file: ./configs/admiral.yaml
+  # TODO: Update Redis configuration
+  # Find details at https://github.com/cisagov/admiral/issues/82
   redis_config:
     file: ./configs/redis.conf
 
