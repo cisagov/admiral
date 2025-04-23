@@ -14,44 +14,44 @@ This project requires a [Docker](https://www.docker.com) installation.
 ## Installation and Execution ##
 
 - Build the docker image:
-  - `docker-compose build`
+  - `docker compose build`
 - Change the credentials in the following configuration files:
-  - `secrets/admiral.yml`
+  - `secrets/admiral.yaml`
   - `secrets/redis.conf`
-  - `docker-compose.yml`
+  - `compose.yaml`
 - Start the composition:
-  - `docker-compose up`
+  - `docker compose up`
   - alternately it can be started in [swarm mode](https://docs.docker.com/engine/swarm/):
-  `docker stack deploy admiral --compose-file docker-compose.yml`
+  `docker stack deploy admiral --compose-file compose.yaml`
 - Monitor the system:
   - [http://localhost:5555](http://localhost:5555)
 - Optional: Run the code tests
-  - `docker-compose -f docker-compose-dev.yml run test`
+  - `docker compose -f compose-dev.yaml run test`
 
 ## Development and Debugging ##
 
-A separate `docker-compose-dev.yml` file is provided to support development and
+A separate `compose-dev.yaml` file is provided to support development and
 testing. Using this composition, a container can be started in a few different modes:
 
 To start up an IPython session with a configured Celery app:
 
-`docker-compose -f docker-compose-dev.yml run celery-shell`
+`docker compose -f compose-dev.yaml run celery-shell`
 
 To start up a development container with a bash shell:
 
-`docker-compose -f docker-compose-dev.yml run bash`
+`docker compose -f compose-dev.yaml run bash`
 
 To run all unit and system tests:
 
-`docker-compose -f docker-compose-dev.yml run test`
+`docker compose -f compose-dev.yaml run test`
 
 Additional arguments can be passed to `pytest` when creating the container:
 
-`docker-compose -f docker-compose-dev.yml run test -vs tests/scan_test.py`
+`docker compose -f compose-dev.yaml run test -vs tests/scan_test.py`
 
 To access a mongo shell:
 
-`docker-compose exec mongo mongo admin -u root -p`
+`docker compose exec mongo mongo admin -u root -p`
 
 To get a shell in a stopped or crashed container:
 

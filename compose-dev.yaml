@@ -1,11 +1,11 @@
 ---
-version: "3.7"
+name: admiral
 
 secrets:
-  admiral_yml:
-    file: ./secrets/admiral.yml
-  mongo_yml:
-    file: ./secrets/mongo.yml
+  admiral_yaml:
+    file: ./secrets/admiral.yaml
+  mongo_yaml:
+    file: ./secrets/mongo.yaml
 
 x-admiral-template: &admiral-template
   build:
@@ -14,14 +14,14 @@ x-admiral-template: &admiral-template
   image: admiral
   init: true
   environment:
-    ADMIRAL_CONFIG_FILE: "/run/secrets/admiral.yml"
+    ADMIRAL_CONFIG_FILE: "/run/secrets/admiral.yaml"
     ADMIRAL_CONFIG_SECTION: dev-mode
     ADMIRAL_WORKER_NAME: dev
   secrets:
-    - source: admiral_yml
-      target: admiral.yml
-    - source: mongo_yml
-      target: config.yml
+    - source: admiral_yaml
+      target: admiral.yaml
+    - source: mongo_yaml
+      target: config.yaml
   volumes:
     - ./src/admiral:/usr/src/admiral/admiral
     - ./tests:/home/cisa/tests
