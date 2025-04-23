@@ -1,15 +1,17 @@
 ---
 name: admiral
 
+configs:
+  admiral_config:
+    file: ./configs/admiral.yaml
+  # TODO: Update Redis configuration
+  # Find details at https://github.com/cisagov/admiral/issues/82
+  redis_config:
+    file: ./configs/redis.conf
+
 secrets:
-  # TODO: Move config files from secrets to a new configs section
-  # See https://github.com/cisagov/admiral/issues/80 for details
-  admiral_yaml:
-    file: ./secrets/admiral.yaml
   mongo_root_passwd_txt:
     file: ./secrets/mongo-root-passwd.txt
-  redis_conf:
-    file: ./secrets/redis.conf
   sslmate_api_key_txt:
     file: ./secrets/sslmate-api-key.txt
 
@@ -17,18 +19,18 @@ x-admiral-template: &admiral-template
   build:
     context: .
     dockerfile: Dockerfile-admiral
+  configs:
+    - admiral_config
   deploy:
     mode: replicated
     replicas: 5
   environment:
-    ADMIRAL_CONFIG_FILE: "/run/secrets/admiral.yaml"
+    ADMIRAL_CONFIG_FILE: "/admiral_config"
     ADMIRAL_CONFIG_SECTION: dev-mode
     ADMIRAL_WORKER_NAME: dev
   image: admiral
   init: true
   secrets:
-    - source: admiral_yaml
-      target: admiral.yaml
     - source: sslmate_api_key_txt
       target: sslmate-api-key.txt
   volumes:  # map for development only, comment out otherwise
@@ -75,14 +77,14 @@ services:
     restart: always
 
   redis:
+    configs:
+      - redis_config
     command:
       - "redis-server"
-      - "/run/secrets/redis_conf"
+      - "/redis_config"
     image: redis:7.0-alpine
     ports:
       - "6379:6379"
-    secrets:
-      - source: redis_conf
 
   redis-commander:
     depends_on:
