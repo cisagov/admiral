@@ -7,6 +7,8 @@ import pytest
 # cisagov Libraries
 from admiral import util
 
+# TODO: As part of https://github.com/cisagov/admiral/issues/9, test the
+# actual configuration file used to make the connection.
 VALID_CONFIG_FILE = "tests/data/valid_config.yml"
 
 
