@@ -6,7 +6,7 @@ import pymongo
 import yaml
 
 
-def load_config(filename="/run/secrets/config.yml"):
+def load_config(filename="/run/secrets/config.yaml"):
     """Load a configuration file."""
     print(f"Reading configuration from {filename}")
     with open(filename) as stream:

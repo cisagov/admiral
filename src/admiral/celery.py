@@ -26,7 +26,7 @@ from ._version import __version__
 CONFIG_FILE_ENV_KEY = "ADMIRAL_CONFIG_FILE"
 CONFIG_SECTION_ENV_KEY = "ADMIRAL_CONFIG_SECTION"
 WORKER_NAME_ENV_KEY = "ADMIRAL_WORKER_NAME"
-DEFAULT_CONFIG_FILE = "/run/secrets/admiral.yml"
+DEFAULT_CONFIG_FILE = "/run/secrets/admiral.yaml"
 DEFAULT_CONFIG_SECTION = "default-section"
 
 
