@@ -14,7 +14,7 @@ x-admiral-template: &admiral-template
   image: admiral
   init: true
   environment:
-    ADMIRAL_CONFIG_FILE: "/run/secrets/admiral.yaml"
+    ADMIRAL_CONFIG_FILE: /run/secrets/admiral.yaml
     ADMIRAL_CONFIG_SECTION: dev-mode
     ADMIRAL_WORKER_NAME: dev
   secrets:
