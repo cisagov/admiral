@@ -21,7 +21,7 @@ x-admiral-template: &admiral-template
     mode: replicated
     replicas: 5
   environment:
-    ADMIRAL_CONFIG_FILE: "/run/secrets/admiral.yaml"
+    ADMIRAL_CONFIG_FILE: /run/secrets/admiral.yaml
     ADMIRAL_CONFIG_SECTION: dev-mode
     ADMIRAL_WORKER_NAME: dev
   image: admiral
@@ -39,12 +39,12 @@ services:
     environment:
       # TODO: https://github.com/cisagov/admiral/issues/19
       # move into the secrets raft
-      CELERY_BROKER_URL: "redis://:fruitcake@redis:6379/0"
+      CELERY_BROKER_URL: redis://:fruitcake@redis:6379/0
     # TODO: https://github.com/cisagov/admiral/issues/18
     # replace this outdated image
     image: crgwbr/docker-celery-flower
     ports:
-      - "5555:5555"
+      - 5555:5555
 
   cert-worker:
     <<: *admiral-template
@@ -71,16 +71,16 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
     image: mongo-express:0.54
     ports:
-      - "8083:8081"
+      - 8083:8081
     restart: always
 
   redis:
     command:
-      - "redis-server"
-      - "/run/secrets/redis_conf"
+      - redis-server
+      - /run/secrets/redis_conf
     image: redis:7.0-alpine
     ports:
-      - "6379:6379"
+      - 6379:6379
     secrets:
       - source: redis_conf
 
@@ -88,11 +88,11 @@ services:
     depends_on:
       - redis
     environment:
-      REDIS_HOSTS: "default:redis:6379:0:fruitcake"
+      REDIS_HOSTS: default:redis:6379:0:fruitcake
     hostname: redis-commander
     image: ghcr.io/joeferner/redis-commander:0.8
     ports:
-      - "8082:8081"
+      - 8082:8081
     restart: always
 
   scanner-worker:
