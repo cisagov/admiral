@@ -3,7 +3,6 @@
 [![GitHub Build Status](https://github.com/cisagov/admiral/workflows/build/badge.svg)](https://github.com/cisagov/admiral/actions)
 [![CodeQL](https://github.com/cisagov/admiral/workflows/CodeQL/badge.svg)](https://github.com/cisagov/admiral/actions/workflows/codeql-analysis.yml)
 [![Coverage Status](https://coveralls.io/repos/github/cisagov/admiral/badge.svg?branch=develop)](https://coveralls.io/github/cisagov/admiral?branch=develop)
-[![Known Vulnerabilities](https://snyk.io/test/github/cisagov/admiral/develop/badge.svg)](https://snyk.io/test/github/cisagov/admiral)
 
 This project implements a distributed certificate transparency log harvester.
 
