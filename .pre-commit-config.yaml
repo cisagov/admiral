@@ -172,7 +172,6 @@ repos:
           - types-docopt
           - types-python-dateutil
           - types-PyYAML
-          - types-redis
           - types-requests
           - types-setuptools
           - types-tqdm
