@@ -68,7 +68,6 @@ dev = [
     "types-python-dateutil",
     "types-PyYAML",
     "types-requests",
-    "types-setuptools",
     "types-tqdm",
 ]
 test = [

@@ -178,7 +178,6 @@ repos:
           - types-python-dateutil
           - types-PyYAML
           - types-requests
-          - types-setuptools
           - types-tqdm
   - repo: https://github.com/pypa/pip-audit
     rev: v2.9.0
