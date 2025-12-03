@@ -47,7 +47,7 @@ dependencies = [
     "tqdm >= 4.30.0",
     "xmljson >= 0.2.0",
 ]
-description = "Admiral"
+description = "A distributed certificate transparency log harvester"
 dynamic = ["readme", "version"]
 keywords = ["celery", "certificate-transparency", "cisa-directives"]
 license = "CC0-1.0"
