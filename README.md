@@ -1,8 +1,10 @@
 # admiral 👩‍✈️🚢⚓️ #
 
 [![GitHub Build Status](https://github.com/cisagov/admiral/workflows/build/badge.svg)](https://github.com/cisagov/admiral/actions)
+[![License](https://img.shields.io/github/license/cisagov/admiral)](https://spdx.org/licenses/)
 [![CodeQL](https://github.com/cisagov/admiral/workflows/CodeQL/badge.svg)](https://github.com/cisagov/admiral/actions/workflows/codeql-analysis.yml)
 [![Coverage Status](https://coveralls.io/repos/github/cisagov/admiral/badge.svg?branch=develop)](https://coveralls.io/github/cisagov/admiral?branch=develop)
+[![Code Style](https://img.shields.io/badge/Code%20Style-black-black)](https://github.com/psf/black)
 
 This project implements a distributed certificate transparency log harvester.
 
