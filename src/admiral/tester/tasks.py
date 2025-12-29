@@ -14,7 +14,7 @@ logger = get_task_logger(__name__)
 @shared_task
 def add(x, y):
     """Add two numbers."""
-    logger.info("Adding {} + {}".format(x, y))
+    logger.info(f"Adding {x} + {y}")
     return x + y
 
 
@@ -52,12 +52,12 @@ def better_add(x, y):
 @shared_task
 def mul(x, y):
     """Multiply two numbers."""
-    logger.info("Multipling {} + {}".format(x, y))
+    logger.info(f"Multipling {x} + {y}")
     return x * y
 
 
 @shared_task
 def xsum(numbers):
     """Sum a list of numbers."""
-    logger.info("Summing {}".format(numbers))
+    logger.info(f"Summing {numbers}")
     return sum(numbers)
