@@ -3,7 +3,6 @@
 # Standard Python Libraries
 import ipaddress
 import subprocess  # nosec security considerations considered
-import sys
 
 # Third-Party Libraries
 from celery import shared_task
@@ -55,25 +54,10 @@ def run_it(command):
     logger.info(f"Executing command: {command}")
 
     try:
-        if sys.version_info >= (3, 7):
-            # TODO: Cannot use capture_output until we are using python 3.7
-            # (which currently breaks celery)
-            # Allowing shell execution via popen below.
-            completed_process = subprocess.run(
-                command, capture_output=True, shell=True, check=True  # nosec
-            )
-        else:
-            # python 3.6 version
-            completed_process = subprocess.run(
-                command,
-                stderr=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                shell=True,  # nosec
-                check=True,
-            )
+        completed_process = subprocess.run(
+            command, capture_output=True, shell=True, check=True  # nosec
+        )
     except subprocess.CalledProcessError as err:
-        # TODO: Log stderr since it is empty when reconstituted on the far side
-        # Perhaps this will work in python 3.7
         logger.error(err.stderr.decode())
         raise err
 
