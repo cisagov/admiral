@@ -54,8 +54,14 @@ def run_it(command):
     logger.info(f"Executing command: {command}")
 
     try:
-        completed_process = subprocess.run(
-            command, capture_output=True, shell=True, check=True  # nosec
+        # TODO: flake8 gives a DUO116 error here about shell=True being
+        # unsafe, but we need to determine whether it is necessary
+        # before removing it.  See #106 for more details.
+        completed_process = subprocess.run(  # noqa: DUO116
+            command,
+            capture_output=True,
+            shell=True,
+            check=True,  # nosec
         )
     except subprocess.CalledProcessError as err:
         logger.error(err.stderr.decode())
