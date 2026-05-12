@@ -87,7 +87,7 @@ def up_scan(ip):
     )
     completed_process = run_it(nmap_command)
     xml_string = completed_process.stdout.decode()
-    data = bf.data(fromstring(xml_string))
+    data = bf.data(fromstring(xml_string, forbid_dtd=True))
     return data
 
 
@@ -114,5 +114,5 @@ def port_scan(ip):
     )
     completed_process = run_it(nmap_command)
     xml_string = completed_process.stdout.decode()
-    data = bf.data(fromstring(xml_string))
+    data = bf.data(fromstring(xml_string, forbid_dtd=True))
     return data
