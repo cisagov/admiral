@@ -17,7 +17,7 @@ def main():
     # Third-Party Libraries
     import IPython
 
-    IPython.embed()  # noqa: E702 <<< BREAKPOINT >>>
+    IPython.embed()
 
 
 if __name__ == "__main__":
