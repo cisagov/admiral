@@ -32,7 +32,7 @@ def celery():
 #     def test_end_to_end(self, celery):
 #         """Perform and end-to-end test of the certificate log tasks."""
 #         summary = summary_by_domain.delay("cyber.dhs.gov")
-#         assert summary.get(timeout=60) is not None, "Summary result should not be None"
+#         assert summary.get(timeout=60) is not None, "Summary result cannot be None"
 #         assert len(summary.get()) > 0, "Summary should return at least one result"
 #         PP.pprint(summary.get())
 #         print(f"received {len(summary.get())} summary records")
