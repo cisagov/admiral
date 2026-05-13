@@ -31,7 +31,11 @@ def slow_add(x, y):
 def bad_add(x, y):
     """Add two numbers, poorly."""
     r = slow_add(x, y)
-    if random.choice([True, False]):  # nosec not used for crypto
+    # flake8 gives a DUO102 error on the next line, claiming that this
+    # is an insecure use of the random module.  We're OK here since
+    # we're not using random for the purposes of cryptography.  This is
+    # the reason for the noqa comment below.
+    if random.choice([True, False]):  # noqa: DUO102 # nosec not used for crypto
         logger.info("Failing on purpose")
         raise Exception("Adding is hard")
     else:

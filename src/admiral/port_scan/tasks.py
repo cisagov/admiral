@@ -54,8 +54,14 @@ def run_it(command):
     logger.info(f"Executing command: {command}")
 
     try:
-        completed_process = subprocess.run(
-            command, capture_output=True, shell=True, check=True  # nosec
+        # TODO: flake8 gives a DUO116 error here about shell=True being
+        # unsafe, but we need to determine whether it is necessary
+        # before removing it.  See #106 for more details.
+        completed_process = subprocess.run(  # noqa: DUO116
+            command,
+            capture_output=True,
+            shell=True,
+            check=True,  # nosec
         )
     except subprocess.CalledProcessError as err:
         logger.error(err.stderr.decode())
@@ -87,7 +93,7 @@ def up_scan(ip):
     )
     completed_process = run_it(nmap_command)
     xml_string = completed_process.stdout.decode()
-    data = bf.data(fromstring(xml_string))
+    data = bf.data(fromstring(xml_string, forbid_dtd=True))
     return data
 
 
@@ -114,5 +120,5 @@ def port_scan(ip):
     )
     completed_process = run_it(nmap_command)
     xml_string = completed_process.stdout.decode()
-    data = bf.data(fromstring(xml_string))
+    data = bf.data(fromstring(xml_string, forbid_dtd=True))
     return data

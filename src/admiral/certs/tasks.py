@@ -15,7 +15,11 @@ from .._version import __version__
 logger = get_task_logger(__name__)
 
 # regexr.com/3e8n2
-DOMAIN_NAME_RE = re.compile(
+#
+# TODO: flake8 gives a DUO138 error for this line, but I'm loathe to
+# change it right now since it currently works.  This is the reason for
+# the noqa comment below.  See #106 for more details.
+DOMAIN_NAME_RE = re.compile(  # noqa: DUO138
     r"^((?:([a-z0-9]\.|[a-z0-9][a-z0-9\-]{0,61}[a-z0-9])\.)+)"
     r"([a-z0-9]{2,63}|(?:[a-z0-9][a-z0-9\-]{0,61}[a-z0-9]))\.?$"
 )
