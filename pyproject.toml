@@ -48,7 +48,7 @@ dependencies = [
     "defusedxml",
     "dnspython",
     "docopt",
-    "mongoengine >= 0.27.0",
+    "mongoengine >= 0.29.3",
     "pymongo <= 4.10",
     "python-dateutil >= 2.7.5",
     "PyYAML >= 6.0.0",
