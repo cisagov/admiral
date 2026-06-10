@@ -46,3 +46,28 @@ def celery():
 #
 #         cert = x509.load_pem_x509_certificate(bytes(pem, "utf-8"), default_backend())
 #         print(f"certificate serial number: {cert.serial_number}")
+
+
+@pytest.mark.parametrize(
+    ("domain", "expected"),
+    [
+        ("example.com", True),
+        ("sub.domain.example.gov", True),
+        ("example.com.", True),  # a single trailing dot (FQDN form) is allowed
+        ("a-b.c-d.com", True),  # hyphens are permitted inside labels
+        ("cyber.dhs.gov", True),
+        ("a..com", False),  # consecutive dots produce an empty label
+        ("-bad.com", False),  # a label may not start with a hyphen
+        ("bad-.com", False),  # a label may not end with a hyphen
+        ("a", False),  # at least two labels are required
+        ("", False),
+        ("x.co", False),  # single-character labels are not accepted
+        (("a" * 64) + ".com", False),  # a label may not exceed 63 characters
+    ],
+)
+def test_is_valid_domain_name(domain, expected):
+    """Accept well-formed domain names and reject malformed ones."""
+    # cisagov Libraries
+    from admiral.certs.tasks import is_valid_domain_name
+
+    assert is_valid_domain_name(domain) is expected

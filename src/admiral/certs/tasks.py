@@ -14,15 +14,27 @@ from .._version import __version__
 
 logger = get_task_logger(__name__)
 
-# regexr.com/3e8n2
-#
-# TODO: flake8 gives a DUO138 error for this line, but I'm loathe to
-# change it right now since it currently works.  This is the reason for
-# the noqa comment below.  See #106 for more details.
-DOMAIN_NAME_RE = re.compile(  # noqa: DUO138
-    r"^((?:([a-z0-9]\.|[a-z0-9][a-z0-9\-]{0,61}[a-z0-9])\.)+)"
-    r"([a-z0-9]{2,63}|(?:[a-z0-9][a-z0-9\-]{0,61}[a-z0-9]))\.?$"
-)
+# A single DNS label: 2 to 63 characters, alphanumeric at the start and end,
+# with hyphens permitted in between. Validating one label at a time (rather than
+# the whole domain in a single pattern) avoids the catastrophic backtracking the
+# previous combined regex was flagged for (flake8 DUO138 / ReDoS); see #106.
+LABEL_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$")
+
+
+def is_valid_domain_name(domain):
+    """Return True if domain is a dotted name of two or more valid DNS labels.
+
+    A single trailing dot (the absolute/FQDN form) is permitted. This accepts
+    the same well-formed domain names as the previous combined regex while
+    rejecting malformed input with empty labels (for example consecutive dots).
+    """
+    if domain.endswith("."):
+        domain = domain[:-1]
+    labels = domain.split(".")
+    if len(labels) < 2:
+        return False
+    return all(LABEL_RE.match(label) for label in labels)
+
 
 # Default timeout values for tasks that perform web requests. See
 # "Warning' at https://docs.celeryq.dev/en/stable/userguide/tasks.html
@@ -45,8 +57,7 @@ def summary_by_domain(domain, subdomains=True):
 
     """
     # validate input
-    m = DOMAIN_NAME_RE.match(domain)
-    if m is None:
+    if not is_valid_domain_name(domain):
         raise ValueError(f"invalid domain name format: {domain}")
 
     # read SSLMate API key
