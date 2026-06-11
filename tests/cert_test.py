@@ -61,7 +61,8 @@ def celery():
         ("bad-.com", False),  # a label may not end with a hyphen
         ("a", False),  # at least two labels are required
         ("", False),
-        ("x.co", False),  # single-character labels are not accepted
+        (None, False),  # non-string input should be rejected
+        ("x.co", False),  # single-character labels are not accepted by this validator
         (("a" * 64) + ".com", False),  # a label may not exceed 63 characters
     ],
 )

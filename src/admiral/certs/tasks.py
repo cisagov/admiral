@@ -28,6 +28,8 @@ def is_valid_domain_name(domain):
     the same well-formed domain names as the previous combined regex while
     rejecting malformed input with empty labels (for example consecutive dots).
     """
+    if not isinstance(domain, str):
+        return False
     if domain.endswith("."):
         domain = domain[:-1]
     labels = domain.split(".")
