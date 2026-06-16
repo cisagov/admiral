@@ -63,6 +63,7 @@ def celery():
         ("", False),
         (None, False),  # non-string input should be rejected
         ("x.co", False),  # single-character labels are not accepted by this validator
+        (("a" * 63) + ".com", True),  # 63-character labels are permitted
         (("a" * 64) + ".com", False),  # a label may not exceed 63 characters
     ],
 )
