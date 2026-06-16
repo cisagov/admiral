@@ -67,7 +67,7 @@ def celery():
     ],
 )
 def test_is_valid_domain_name(domain, expected):
-    """Accept well-formed domain names and reject malformed ones."""
+    """Accept domains that satisfy the project's validation rules."""
     # cisagov Libraries
     from admiral.certs.tasks import is_valid_domain_name
 

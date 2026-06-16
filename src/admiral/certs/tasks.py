@@ -14,19 +14,23 @@ from .._version import __version__
 
 logger = get_task_logger(__name__)
 
-# A single DNS label: 2 to 63 characters, alphanumeric at the start and end,
-# with hyphens permitted in between. Validating one label at a time (rather than
-# the whole domain in a single pattern) avoids the catastrophic backtracking the
-# previous combined regex was flagged for (flake8 DUO138 / ReDoS); see #106.
+# A single domain label as accepted by this project: 2 to 63 lowercase
+# alphanumeric characters with hyphens permitted in between.  This is stricter
+# than RFC 1035 (which allows 1-char labels and is case-insensitive) because the
+# original regex enforced the same constraints and the CT-log queries only need
+# lowercase FQDNs.  Validating one label at a time avoids the catastrophic
+# backtracking the previous combined regex was flagged for (flake8 DUO138 /
+# ReDoS); see #106.
 LABEL_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$")
 
 
 def is_valid_domain_name(domain):
-    """Return True if domain is a dotted name of two or more valid DNS labels.
+    """Return True if *domain* passes this project's domain-name rules.
 
-    A single trailing dot (the absolute/FQDN form) is permitted. This accepts
-    the same well-formed domain names as the previous combined regex while
-    rejecting malformed input with empty labels (for example consecutive dots).
+    Rules: two or more labels, each 2-63 lowercase alphanumeric characters
+    (hyphens allowed in the middle), with an optional trailing dot (FQDN form).
+    These constraints are intentionally stricter than RFC 1035 because they
+    mirror the original regex and match the CT-log query requirements.
     """
     if not isinstance(domain, str):
         return False
