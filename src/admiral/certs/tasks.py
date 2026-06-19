@@ -14,15 +14,33 @@ from .._version import __version__
 
 logger = get_task_logger(__name__)
 
-# regexr.com/3e8n2
-#
-# TODO: flake8 gives a DUO138 error for this line, but I'm loathe to
-# change it right now since it currently works.  This is the reason for
-# the noqa comment below.  See #106 for more details.
-DOMAIN_NAME_RE = re.compile(  # noqa: DUO138
-    r"^((?:([a-z0-9]\.|[a-z0-9][a-z0-9\-]{0,61}[a-z0-9])\.)+)"
-    r"([a-z0-9]{2,63}|(?:[a-z0-9][a-z0-9\-]{0,61}[a-z0-9]))\.?$"
-)
+# A single domain label as accepted by this project: 2 to 63 lowercase
+# alphanumeric characters with hyphens permitted in between.  This is stricter
+# than RFC 1035 (which allows 1-char labels and is case-insensitive) because the
+# original regex enforced the same constraints and the CT-log queries only need
+# lowercase FQDNs.  Validating one label at a time avoids the catastrophic
+# backtracking the previous combined regex was flagged for (flake8 DUO138 /
+# ReDoS); see #106.
+LABEL_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$")
+
+
+def is_valid_domain_name(domain):
+    """Return True if *domain* passes this project's domain-name rules.
+
+    Rules: two or more labels, each 2-63 lowercase alphanumeric characters
+    (hyphens allowed in the middle), with an optional trailing dot (FQDN form).
+    These constraints are intentionally stricter than RFC 1035 because they
+    mirror the original regex and match the CT-log query requirements.
+    """
+    if not isinstance(domain, str):
+        return False
+    if domain.endswith("."):
+        domain = domain[:-1]
+    labels = domain.split(".")
+    if len(labels) < 2:
+        return False
+    return all(LABEL_RE.match(label) for label in labels)
+
 
 # Default timeout values for tasks that perform web requests. See
 # "Warning' at https://docs.celeryq.dev/en/stable/userguide/tasks.html
@@ -45,8 +63,7 @@ def summary_by_domain(domain, subdomains=True):
 
     """
     # validate input
-    m = DOMAIN_NAME_RE.match(domain)
-    if m is None:
+    if not is_valid_domain_name(domain):
         raise ValueError(f"invalid domain name format: {domain}")
 
     # read SSLMate API key
