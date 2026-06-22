@@ -56,13 +56,14 @@ def celery():
         ("example.com.", True),  # a single trailing dot (FQDN form) is allowed
         ("a-b.c-d.com", True),  # hyphens are permitted inside labels
         ("cyber.dhs.gov", True),
+        ("a.com", True),  # Single-character labels are allowed...
+        ("-.com", False),  # ...but not if they only contain a hyphen
         ("a..com", False),  # consecutive dots produce an empty label
         ("-bad.com", False),  # a label may not start with a hyphen
         ("bad-.com", False),  # a label may not end with a hyphen
         ("a", False),  # at least two labels are required
         ("", False),
         (None, False),  # non-string input should be rejected
-        ("x.co", False),  # single-character labels are not accepted by this validator
         (("a" * 63) + ".com", True),  # 63-character labels are permitted
         (("a" * 64) + ".com", False),  # a label may not exceed 63 characters
     ],

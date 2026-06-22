@@ -14,23 +14,27 @@ from .._version import __version__
 
 logger = get_task_logger(__name__)
 
-# A single domain label as accepted by this project: 2 to 63 lowercase
-# alphanumeric characters with hyphens permitted in between.  This is stricter
-# than RFC 1035 (which allows 1-char labels and is case-insensitive) because the
-# original regex enforced the same constraints and the CT-log queries only need
-# lowercase FQDNs.  Validating one label at a time avoids the catastrophic
-# backtracking the previous combined regex was flagged for (flake8 DUO138 /
-# ReDoS); see #106.
-LABEL_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$")
+# This regex matches a single domain label as accepted by this project:
+# a string containing 1-63 characters from the set [a-z0-9-] that does
+# not start or end with a hyphen.
+#
+# This is stricter than RFC 1035 (which is case-insensitive) because the
+# CT-log queries only need lowercase FQDNs.
+#
+# Note that validating one label at a time avoids the catastrophic
+# backtracking the previous combined regex was flagged for (flake8
+# DUO138 / ReDoS); see #106.
+LABEL_RE = re.compile(r"^(?!-)[a-z0-9-]{1,63}(?<!-)$")
 
 
 def is_valid_domain_name(domain):
     """Return True if *domain* passes this project's domain-name rules.
 
-    Rules: two or more labels, each 2-63 lowercase alphanumeric characters
-    (hyphens allowed in the middle), with an optional trailing dot (FQDN form).
-    These constraints are intentionally stricter than RFC 1035 because they
-    mirror the original regex and match the CT-log query requirements.
+    Rules: two or more labels, each 1-63 lowercase alphanumeric
+      characters(hyphens allowed in the middle), with an optional
+      trailing dot (FQDN form).  These constraints are intentionally
+      stricter than RFC 1035 (which is case-insensitive) because
+      CT-log queries only require lowercase FQDNs.
     """
     if not isinstance(domain, str):
         return False
