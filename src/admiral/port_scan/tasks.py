@@ -54,13 +54,9 @@ def run_it(command):
     logger.info(f"Executing command: {command}")
 
     try:
-        # TODO: flake8 gives a DUO116 error here about shell=True being
-        # unsafe, but we need to determine whether it is necessary
-        # before removing it.  See #106 for more details.
-        completed_process = subprocess.run(  # noqa: DUO116
+        completed_process = subprocess.run(
             command,
             capture_output=True,
-            shell=True,
             check=True,  # nosec
         )
     except subprocess.CalledProcessError as err:
@@ -83,14 +79,28 @@ def up_scan(ip):
     """
     # validate input
     valid_ip = ipaddress.ip_address(ip)
-    # nnap requires a `-6` option if the target is IPv6
+    # nmap requires a `-6` option if the target is IPv6
     # TODO: ICMP Timestamp and Address Mask pings are only valid for IPv4.
-    v6_flag = "-6 " if valid_ip.version == 6 else ""
+    v6_flag = ["-6"] if valid_ip.version == 6 else []
     ports = ",".join(str(i) for i in QUICK_PORTS)
-    nmap_command = (
-        f"sudo nmap {v6_flag}{valid_ip} --stats-every 60 -oX - "
-        f"-n -sn -T4 --host-timeout 15m -PE -PP -PS{ports}"
-    )
+    nmap_command = [
+        "sudo",
+        "nmap",
+        *v6_flag,
+        str(valid_ip),
+        "--stats-every",
+        "60",
+        "-oX",
+        "-",
+        "-n",
+        "-sn",
+        "-T4",
+        "--host-timeout",
+        "15m",
+        "-PE",
+        "-PP",
+        f"-PS{ports}",
+    ]
     completed_process = run_it(nmap_command)
     xml_string = completed_process.stdout.decode()
     data = bf.data(fromstring(xml_string, forbid_dtd=True))
@@ -110,14 +120,34 @@ def port_scan(ip):
     """
     # validate input
     valid_ip = ipaddress.ip_address(ip)
-    # nnap requires a `-6` option if the target is IPv6
-    v6_flag = "-6 " if valid_ip.version == 6 else ""
-    nmap_command = (
-        f"sudo nmap {v6_flag}{valid_ip} --stats-every 60 -oX - "
-        "-R -Pn -T4 --host-timeout 120m --max-scan-delay 5ms "
-        "--max-retries 2 --min-parallelism 32 "
-        "--defeat-rst-ratelimit -sV -O -sS -p1-65535"
-    )
+    # nmap requires a `-6` option if the target is IPv6
+    v6_flag = ["-6"] if valid_ip.version == 6 else []
+    nmap_command = [
+        "sudo",
+        "nmap",
+        *v6_flag,
+        str(valid_ip),
+        "--stats-every",
+        "60",
+        "-oX",
+        "-",
+        "-R",
+        "-Pn",
+        "-T4",
+        "--host-timeout",
+        "120m",
+        "--max-scan-delay",
+        "5ms",
+        "--max-retries",
+        "2",
+        "--min-parallelism",
+        "32",
+        "--defeat-rst-ratelimit",
+        "-sV",
+        "-O",
+        "-sS",
+        "-p1-65535",
+    ]
     completed_process = run_it(nmap_command)
     xml_string = completed_process.stdout.decode()
     data = bf.data(fromstring(xml_string, forbid_dtd=True))
