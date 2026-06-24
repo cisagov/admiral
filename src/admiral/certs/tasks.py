@@ -31,7 +31,7 @@ def is_valid_domain_name(domain):
     """Return True if *domain* passes this project's domain-name rules.
 
     Rules: two or more labels, each 1-63 lowercase alphanumeric
-      characters(hyphens allowed in the middle), with an optional
+      characters (hyphens allowed in the middle), with an optional
       trailing dot (FQDN form).  These constraints are intentionally
       stricter than RFC 1035 (which is case-insensitive) because
       CT-log queries only require lowercase FQDNs.
